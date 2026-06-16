@@ -1,0 +1,50 @@
+{
+  "name": "@clapp/common",
+  "version": "0.0.1-alpha.1",
+  "type": "module",
+  "description": "TypeScript types for CLI command plugins",
+  "license": "MIT",
+  "author": "Paul Glazkow",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "default": "./dist/clapp-common.js",
+      "types": "./dist/clapp-common.d.ts"
+    }
+  },
+  "keywords": [
+    "cli",
+    "typescript",
+    "types",
+    "plugin-system",
+    "interfaces"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/orion76/clapp.git",
+    "directory": "packages/common"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "build": "npm run clean && rollup -c",
+    "clean": "rm -rf dist",
+    "pack": "npm pack",
+    "prepublishOnly": "npm run build",
+    "test": "echo tests for clapp command!",
+    "install-libs": "./scripts/install.sh",
+    "il": "npm run install-libs"
+  },
+  "peerDependencies": {
+
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "tslib": "^2.4.0"
+  }
+}
