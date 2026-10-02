@@ -1,1 +1,0 @@
-export type TArgumentParseFunc<T> = <T>(value: string, previous: T) => T;
