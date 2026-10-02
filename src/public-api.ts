@@ -6,4 +6,3 @@
 // Re-export all types and interfaces
 export * from './types';
 export * from './utils';
-export { PluginCommandBase } from './plugin.base';

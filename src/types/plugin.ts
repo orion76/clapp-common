@@ -20,7 +20,7 @@ export interface IPluginCommandDefinition<A = {}> extends IPluginCommandDefiniti
   pluginClass: IType<IPluginCommand<A>>;
 }
 export interface IPluginCommand<A = {}> extends IPlugin {
-  definition: IPluginCommandDefinition;
+  definition: IPluginCommandDefinition<A>;
   getArguments: (args: string[], opts: Record<string, unknown>) => A;
   action: (args: A) => ICommandResult | Promise<ICommandResult>;
 }
