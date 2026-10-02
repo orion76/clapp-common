@@ -4,7 +4,7 @@ import dts from 'rollup-plugin-dts';
 import pkg from './package.json' with { type: "json" };
 
 const distRoot = 'dist';
-const libName = 'command';
+const libName = 'common';
 const bundleName = `clapp-${libName}`;
 
 export default [

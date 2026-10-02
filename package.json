@@ -39,7 +39,8 @@
     "il": "npm run install-libs"
   },
   "peerDependencies": {
-
+    "@clapp/utils": "^0.0.4",
+    "@orion76/plugin": "^0.2.2"
   },
   "devDependencies": {
     "typescript": "^5.9.3"

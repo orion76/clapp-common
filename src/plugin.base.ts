@@ -1,5 +1,5 @@
 import { PluginBase } from '@orion76/plugin';
-import { IPluginCommand, IPluginCommandDefinition, ICommandResult } from '@clapp/core';
+import { IPluginCommand, IPluginCommandDefinition, ICommandResult } from './types';
 
 /**
  * Command plugin instance

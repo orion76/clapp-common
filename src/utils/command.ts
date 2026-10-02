@@ -1,4 +1,4 @@
-import { UPluginCommandDefinition, IPluginCommandDefinition } from "@clapp/common";
+import { UPluginCommandDefinition, IPluginCommandDefinition } from "../types";
 
 export function isCommand(definition: UPluginCommandDefinition): definition is IPluginCommandDefinition {
   return definition.commandType === 'command';
