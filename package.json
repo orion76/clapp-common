@@ -1,6 +1,6 @@
 {
   "name": "@clapp/common",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1",
   "type": "module",
   "description": "TypeScript types for CLI command plugins",
   "license": "MIT",
