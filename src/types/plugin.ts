@@ -19,9 +19,14 @@ export interface IPluginCommandDefinition<A = {}> extends IPluginCommandDefiniti
   command: ICommandDefintion;
   pluginClass: IType<IPluginCommand<A>>;
 }
+/**
+ * Authoring-time command definition. `pluginClass` is attached by the
+ * `@NodePlugin` decorator, so it is omitted from the object the author writes.
+ */
+export type IPluginCommandDefinitionData<A = {}> = Omit<IPluginCommandDefinition<A>, 'pluginClass'>;
 export interface IPluginCommand<A = {}> extends IPlugin {
   definition: IPluginCommandDefinition<A>;
-  getArguments: (args: string[], opts: Record<string, unknown>) => A;
+  getArguments: (args: string[], opts: Record<string, unknown>) => Promise<A>;
   action: (args: A) => ICommandResult | Promise<ICommandResult>;
 }
 export interface IPluginCommandWithSubcommandsDefinition extends IPluginCommandDefinitionBase {

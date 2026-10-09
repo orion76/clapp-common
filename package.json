@@ -40,7 +40,7 @@
   },
   "peerDependencies": {
     "@clapp/utils": "^0.0.4",
-    "@orion76/plugin": "^0.2.3"
+    "@orion76/plugin": "^0.3.0"
   },
   "devDependencies": {
     "typescript": "^5.9.3"

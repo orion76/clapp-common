@@ -1,11 +1,5 @@
-import { IPackageJson } from '@clapp/utils';
-
-export type TCommandFindFunction = (fileName: string) => boolean;
-
 export interface IPluginDiscoveryConfig {
-  commandsDirectory: string;
-  commandFindFunc: TCommandFindFunction;
-  projectAvailableCheckFn: (packageJson: IPackageJson) => boolean;
+  patterns: string[];
 }
 
 /**
@@ -15,9 +9,7 @@ export interface CLIConfig {
   name: string;
   description: string;
   version: string;
-  projects: string[];
   commandDiscovery: IPluginDiscoveryConfig;
-  contextDiscovery: IPluginDiscoveryConfig;
 }
 
 export interface IClapp {
