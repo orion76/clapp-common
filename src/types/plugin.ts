@@ -1,22 +1,22 @@
 import { IPlugin, IPluginDefinition, IType } from '@orion76/plugin';
 import { ICommandArgument, ICommandOption } from './commander';
+import { PLUGIN_COMMAND_TYPE, PLUGIN_CONTEXT_TYPE } from '../constants';
+export type UPluginTypes = typeof PLUGIN_COMMAND_TYPE | typeof PLUGIN_CONTEXT_TYPE;
 
-export interface ICommandDefintion {
+export interface ICommandConfig {
   arguments?: ICommandArgument[];
   options?: ICommandOption[];
   aliases?: string[];
   description?: string;
 }
 
-export type UCommandDefinitionType = 'command' | 'main';
-
-export interface IPluginCommandDefinitionBase extends IPluginDefinition {
-  commandType: UCommandDefinitionType;
-}
-
-export interface IPluginCommandDefinition<A = {}> extends IPluginCommandDefinitionBase {
-  commandType: 'command';
-  command: ICommandDefintion;
+/**
+ * Flat command definition. Hierarchy is expressed with the optional `parent`
+ * field — the id of the top-level command (group) this command belongs to.
+ */
+export interface IPluginCommandDefinition<A = {}> extends IPluginDefinition {
+  parent?: string;
+  config: ICommandConfig;
   pluginClass: IType<IPluginCommand<A>>;
 }
 /**
@@ -24,21 +24,18 @@ export interface IPluginCommandDefinition<A = {}> extends IPluginCommandDefiniti
  * `@NodePlugin` decorator, so it is omitted from the object the author writes.
  */
 export type IPluginCommandDefinitionData<A = {}> = Omit<IPluginCommandDefinition<A>, 'pluginClass'>;
+
 export interface IPluginCommand<A = {}> extends IPlugin {
   definition: IPluginCommandDefinition<A>;
   getArguments: (args: string[], opts: Record<string, unknown>) => Promise<A>;
-  action: (args: A) => ICommandResult | Promise<ICommandResult>;
-}
-export interface IPluginCommandWithSubcommandsDefinition extends IPluginCommandDefinitionBase {
-  commandType: 'main';
-  commands: UPluginCommandDefinition[];
+  action: (args: A) => Promise<ICommandResult>;
 }
 
-export type UPluginCommandDefinition = IPluginCommandDefinition | IPluginCommandWithSubcommandsDefinition;
-
-export interface IPluginCommandWithSubcommands extends IPlugin {
-  definition: IPluginCommandWithSubcommandsDefinition;
-}
+/**
+ * Single command definition type. Kept as an alias for backward compatibility;
+ * `IPluginCommandDefinition` is the only command definition shape now.
+ */
+export type UPluginCommandDefinition = IPluginCommandDefinition;
 
 export interface ICommandResult {
   success: boolean;

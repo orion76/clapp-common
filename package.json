@@ -43,6 +43,7 @@
     "@orion76/plugin": "^0.3.0"
   },
   "devDependencies": {
+    "@types/node": "^24.10.1",
     "typescript": "^5.9.3"
   },
   "dependencies": {
