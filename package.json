@@ -40,7 +40,10 @@
   },
   "peerDependencies": {
     "@clapp/utils": "^0.0.4",
-    "@orion76/plugin": "^0.3.0"
+    "@orion76/node-plugin": "^0.3.0",
+    "@orion76/plugin": "^0.3.0",
+    "inversify": "^8.2.3",
+    "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",

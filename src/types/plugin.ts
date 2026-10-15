@@ -1,7 +1,7 @@
 import { IPlugin, IPluginDefinition, IType } from '@orion76/plugin';
 import { ICommandArgument, ICommandOption } from './commander';
-import { PLUGIN_COMMAND_TYPE, PLUGIN_CONTEXT_TYPE } from '../constants';
-export type UPluginTypes = typeof PLUGIN_COMMAND_TYPE | typeof PLUGIN_CONTEXT_TYPE;
+import { PLUGIN_COMMAND_TYPE, PLUGIN_CONTEXT_TYPE, PLUGIN_FORMATTER_TYPE } from '../constants';
+export type UPluginTypes = typeof PLUGIN_COMMAND_TYPE | typeof PLUGIN_CONTEXT_TYPE | typeof PLUGIN_FORMATTER_TYPE;
 
 export interface ICommandConfig {
   arguments?: ICommandArgument[];
