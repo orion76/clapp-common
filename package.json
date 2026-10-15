@@ -47,6 +47,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@opentf/cli-styles": "^0.15.0",
     "tslib": "^2.4.0"
   }
 }
