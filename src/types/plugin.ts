@@ -16,6 +16,15 @@ export interface ICommandConfig {
  */
 export interface IPluginCommandDefinition<A = {}> extends IPluginDefinition {
   parent?: string;
+  /**
+   * Identifier of the formatter the core prints the command result with. When
+   * it is set, the command is expected to return its data in `ICommandResult.data`
+   * instead of printing it; the core resolves the formatter plugin with this id
+   * and writes its output to stdout. The type is a plain string here, because
+   * this package must not depend on the list of formatters — command authors get
+   * the strict union `UFormatterKind` from `@clapp/command`.
+   */
+  formatter?: string;
   config: ICommandConfig;
   pluginClass: IType<IPluginCommand<A>>;
 }
@@ -37,7 +46,18 @@ export interface IPluginCommand<A = {}> extends IPlugin {
  */
 export type UPluginCommandDefinition = IPluginCommandDefinition;
 
-export interface ICommandResult {
+/**
+ * Result of a command action.
+ *
+ * A command that declares a `formatter` returns the data to render in `data`;
+ * the core passes it to the formatter plugin and prints the returned string.
+ * Commands without a formatter keep printing their own output and leave `data`
+ * unset.
+ * @template D Type of the data handed to the formatter; `unknown` by default
+ */
+export interface ICommandResult<D = unknown> {
   success: boolean;
   error?: string[];
+  /** Data for the formatter declared by the command definition. */
+  data?: D;
 }

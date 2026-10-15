@@ -40,17 +40,13 @@
   },
   "peerDependencies": {
     "@clapp/utils": "^0.0.4",
-    "@orion76/node-plugin": "^0.3.0",
-    "@orion76/plugin": "^0.3.0",
-    "inversify": "^8.2.3",
-    "reflect-metadata": "^0.2.2"
+    "@orion76/plugin": "^0.3.0"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@opentf/cli-styles": "^0.15.0",
     "tslib": "^2.4.0"
   }
 }
