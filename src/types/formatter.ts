@@ -19,7 +19,9 @@ export interface IPluginFormatterDefinition<K extends string = string> extends I
 export type IPluginFormatterDefinitionData<K extends string = string> = Omit<IPluginFormatterDefinition<K>, 'pluginClass'>;
 
 /**
- * Formatter plugin instance: turns data into a string ready for the terminal.
+ * Formatter plugin instance: turns data into a string. Which styling the string
+ * carries is up to the formatter set a host configures — the terminal formatters
+ * write for a terminal, the MCP formatters write for the protocol stream.
  * Formatting is asynchronous to stay uniform with the other plugin types
  * (commands, contexts) and to leave room for implementations that need to
  * inspect the environment before rendering.
