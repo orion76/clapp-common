@@ -67,7 +67,11 @@ export interface IPluginSourceConfig {
   /**
    * Ids of plugin definitions that are not loaded from this source. An id
    * disabled in every source that provides it is never registered, and such a
-   * disabled definition never raises a duplicate/conflict error.
+   * disabled definition never raises a duplicate/conflict error. When the id
+   * belongs to a definition that is a parent of other definitions (a command
+   * group), the whole subtree of the id is not loaded either — no matter which
+   * source the child definitions came from — so a registered child never
+   * references a parent that was dropped.
    */
   disabled: string[];
 }
@@ -83,6 +87,8 @@ export interface IPluginDiscoveryConfig {
    * Ids of plugin definitions that are not loaded from **any** source of the
    * type. Merged with the `disabled` list of every source: a definition is
    * skipped when its id is disabled in the source it comes from or in the type.
+   * Disabling the id of a group definition disables its whole subtree as well
+   * (see {@link IPluginSourceConfig.disabled}).
    */
   disabled: string[];
 }
