@@ -12,9 +12,25 @@ export interface ICommandConfig {
 
 /**
  * Flat command definition. Hierarchy is expressed with the optional `parent`
- * field — the id of the top-level command (group) this command belongs to.
+ * field — the id of the definition this command belongs to.
+ *
+ * `id` and `command` name different things. `id` is the identifier of the plugin
+ * definition and is the key the engine addresses the plugin by; `command` is the name
+ * the command has on the surface whose engine registers it. The definition loader keys
+ * definitions by `id` alone — ignoring `parent` — and rejects a duplicate with
+ * `Plugin definition already exists`, so a command set keeps its `id`s flat and unique:
+ * for a command of a set the id is the full path from the root to the subcommand joined
+ * with `_` (`board`, `board_list`, `board_next`, `skill`, `skill_add`, `skill_list`).
  */
 export interface IPluginCommandDefinition<A = {}> extends IPluginDefinition {
+  /**
+   * Name of the command on the surface that registers it: the segment a user types in
+   * commander, that is the last segment of the path of the command (`list`, `next`,
+   * `add`). A group node names the segment its subcommands are nested under (`board`,
+   * `skill`). An id of a set command is the full path (`board_list`), so the surface
+   * name is always the `command` and never the `id`.
+   */
+  command: string;
   /**
    * Kind of the command. A project command has exactly one of three kinds, and
    * each kind maps to a surface of the MCP server a host may expose:
@@ -31,6 +47,11 @@ export interface IPluginCommandDefinition<A = {}> extends IPluginDefinition {
    * never mapped to MCP.
    */
   kind: UCommandDefinitionKind;
+  /**
+   * Id of the parent definition this command is nested under, or omitted for a root
+   * command. The reference is by `id`, not by `command`: `board_list` declares
+   * `parent: 'board'`, while its `command` is `list`.
+   */
   parent?: string;
   /**
    * Identifier of the formatter the core prints the command result with. When
