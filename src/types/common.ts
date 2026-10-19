@@ -1,11 +1,4 @@
 
-export interface IPluginDiscoveryConfig {
-  patterns: string[];
-}
-
-
-
-
 export interface IClapp {
   run(argv?: string[]): Promise<void>;
 }
