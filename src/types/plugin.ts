@@ -62,6 +62,13 @@ export interface IPluginCommandDefinition<A = {}> extends IPluginDefinition {
    * the strict union `UFormatterKind` from `@clapp/command`.
    */
   formatter?: string;
+  /**
+   * Array of context identifiers that this command requires to execute.
+   * Each string is the id of a context plugin (e.g. "project", "cwd").
+   * The values of these contexts will be passed to the command's `action` method
+   * as the second argument.
+   */
+  contexts?: string[];
   config: ICommandConfig;
   pluginClass: IType<IPluginCommand<A>>;
 }
@@ -74,9 +81,14 @@ export type IPluginCommandDefinitionData<A = {}> = Omit<IPluginCommandDefinition
 export interface IPluginCommand<A = {}> extends IPlugin {
   definition: IPluginCommandDefinition<A>;
   getArguments: (args: string[], opts: Record<string, unknown>) => Promise<A>;
-  action: (args: A) => Promise<ICommandResult>;
+  /**
+   * Action handler invoked with the parsed operands and options, plus an array
+   * of context values required by the command.
+   * @param args Positional and named operands declared by the command definition
+   * @param contexts Array of context values corresponding to the command's `contexts` declaration
+   */
+  action: (args: A, contexts: string[]) => Promise<ICommandResult>;
 }
-
 /**
  * Single command definition type. Kept as an alias for backward compatibility;
  * `IPluginCommandDefinition` is the only command definition shape now.
