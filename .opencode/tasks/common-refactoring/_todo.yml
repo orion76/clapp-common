@@ -1,0 +1,34 @@
+# common-refactoring: Перенос классов-типов плагинов и реорганизация barrel-экспортов в @clapp/common: убрать бардак с экспортами, переместить formatter-типы из plugins/command в correct plugin-разделы, пересмотреть barrel экспорты (index.ts, public-api.ts)
+task: common-refactoring
+version: 1
+groups:
+  - id: а
+    title: Ревью и перенос barrel-экспортов
+    executor: coder
+    status: todo
+items:
+  - id: а1
+    group: а
+    text: 'Провести ревью barrel-экспортов: packages/common/src/public-api.ts и index.ts — убрать дубли, formatter-типы должны экспортироваться из @clapp/common'
+    executor: coder
+    status: todo
+  - id: а2
+    group: а
+    text: 'Найти formatter-типы в packages/command/ (formatter/types.ts и др.) и перенести в plugin-types/formatter/'
+    executor: coder
+    status: todo
+  - id: а3
+    group: а
+    text: 'Обновить barrel-файлы (public-api.ts, index.ts) так, чтобы formatter-типы экспортировались из @clapp/common'
+    executor: coder
+    status: todo
+  - id: а4
+    group: а
+    text: 'Убрать @clapp/command из зависимостей common/core и добавить runtime-зависимости @orion76/node-plugin, inversify, reflect-metadata'
+    executor: coder
+    status: todo
+  - id: а5
+    group: а
+    text: 'Проверить инварианты: у common нет зависимости от core, у core есть зависимость от common'
+    executor: coder
+    status: todo
