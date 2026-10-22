@@ -13,3 +13,8 @@ export * from './formatter/formatter';
 export * from './formatter/base';
 export * from './constants';
 export * from './tokens';
+
+// Re-exports for command plugin types (compatible with original command package)
+export { PluginCommandBase } from './command/base';
+export { UFormatterKind, ITableData, IOrderedListData, IKeyValueData, IKeyValuePair, IKeyValueSection, TTableCell, TTableRow, TTableRecordRow, TListMarker, IOrderedListItem, TKeyValuePairValue, IFormatterDataMap, TFormatterData, IFormatterCommandDefinitionData } from './command/formatter';
+export * from './command';

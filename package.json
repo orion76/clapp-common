@@ -47,6 +47,9 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "tslib": "^2.4.0"
+    "tslib": "^2.4.0",
+    "@orion76/node-plugin": "^0.3.0",
+    "inversify": "^8.2.3",
+    "reflect-metadata": "^0.2.2"
   }
 }
