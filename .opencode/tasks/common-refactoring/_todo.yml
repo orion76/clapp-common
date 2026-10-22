@@ -4,31 +4,41 @@ version: 1
 groups:
   - id: а
     title: Ревью и перенос barrel-экспортов
-    executor: coder
+    executor: reviewer
     status: todo
 items:
   - id: а1
     group: а
-    text: 'Провести ревью barrel-экспортов: packages/common/src/public-api.ts и index.ts — убрать дубли, formatter-типы должны экспортироваться из @clapp/common'
-    executor: coder
+    text: 'Провести ревью barrel-экспортов (public-api.ts, index.ts): выявить все упоминания @clapp/command, formatter-типы, которые должны быть в @clapp/common; проверить barrel-экспорты на дубли и правильность экспорта. Оформить отчёт в конверт reviewer-planner.yml.'
+    executor: reviewer
     status: todo
   - id: а2
     group: а
-    text: 'Найти formatter-типы в packages/command/ (formatter/types.ts и др.) и перенести в plugin-types/formatter/'
-    executor: coder
+    text: 'Проверить, где лежат formatter-типы сейчас: найти formatter-типы в packages/command/ и packages/common/src/plugin-types/formatter/. Сделать вывод о необходимости переноса в plugin-types/formatter.'
+    executor: reviewer
     status: todo
   - id: а3
     group: а
-    text: 'Обновить barrel-файлы (public-api.ts, index.ts) так, чтобы formatter-типы экспортировались из @clapp/common'
+    text: 'Перенести formatter-типы из `plugin-types/command/formatter/` в `plugin-types/formatter/` (устранить дефект ревьюера о расположении типов в выделенной секции).'
     executor: coder
     status: todo
   - id: а4
     group: а
-    text: 'Убрать @clapp/command из зависимостей common/core и добавить runtime-зависимости @orion76/node-plugin, inversify, reflect-metadata'
+    text: 'Обновить barrel-файлы (public-api.ts, index.ts): добавить экспорт formatter-типов из @clapp/common, устранить дефект про discoverability (types должны быть видны напрямую).'
     executor: coder
     status: todo
   - id: а5
     group: а
-    text: 'Проверить инварианты: у common нет зависимости от core, у core есть зависимость от common'
+    text: 'Убрать @clapp/command из зависимостей common/core и добавить runtime-зависимости @orion76/node-plugin, inversify, reflect-metadata.'
+    executor: coder
+    status: todo
+  - id: а6
+    group: а
+    text: 'Проверить инварианты: у common нет зависимости от core, у core есть зависимость от common.'
+    executor: coder
+    status: todo
+  - id: а7
+    group: а
+    text: 'Проверить, что formatter-типы теперь расположены в plugin-types/formatter, а не в command/formatter; обновить внутренние импорты в plugin-types и перепроверить barrel-экспорты.'
     executor: coder
     status: todo
