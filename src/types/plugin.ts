@@ -59,7 +59,7 @@ export interface IPluginCommandDefinition<A = {}, C = {}> extends IPluginDefinit
    * instead of printing it; the core resolves the formatter plugin with this id
    * and writes its output to stdout. The type is a plain string here, because
    * this package must not depend on the list of formatters — command authors get
-   * the strict union `UFormatterKind` from `@clapp/command`.
+   * the strict union `UFormatterKind` from `@clapp/common`.
    */
   formatter?: string;
   /**
