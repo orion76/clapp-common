@@ -22,7 +22,7 @@ export interface ICommandConfig {
  * for a command of a set the id is the full path from the root to the subcommand joined
  * with `_` (`board`, `board_list`, `board_next`, `skill`, `skill_add`, `skill_list`).
  */
-export interface IPluginCommandDefinition<A = {}> extends IPluginDefinition {
+export interface IPluginCommandDefinition<A = {}, C = {}> extends IPluginDefinition {
   /**
    * Name of the command on the surface that registers it: the segment a user types in
    * commander, that is the last segment of the path of the command (`list`, `next`,
@@ -68,7 +68,7 @@ export interface IPluginCommandDefinition<A = {}> extends IPluginDefinition {
    * The values of these contexts will be passed to the command's `action` method
    * as the second argument.
    */
-  contexts?: string[];
+  contexts?: (keyof C)[];
   config: ICommandConfig;
   pluginClass: IType<IPluginCommand<A>>;
 }
@@ -76,10 +76,10 @@ export interface IPluginCommandDefinition<A = {}> extends IPluginDefinition {
  * Authoring-time command definition. `pluginClass` is attached by the
  * `@NodePlugin` decorator, so it is omitted from the object the author writes.
  */
-export type IPluginCommandDefinitionData<A = {}> = Omit<IPluginCommandDefinition<A>, 'pluginClass'>;
+export type IPluginCommandDefinitionData<A = {}, C = {}> = Omit<IPluginCommandDefinition<A, C>, 'pluginClass'>;
 
-export interface IPluginCommand<A = {}> extends IPlugin {
-  definition: IPluginCommandDefinition<A>;
+export interface IPluginCommand<A = {}, C = {}> extends IPlugin {
+  definition: IPluginCommandDefinition<A, C>;
   getArguments: (args: string[], opts: Record<string, unknown>) => Promise<A>;
   /**
    * Action handler invoked with the parsed operands and options, plus an array
@@ -87,7 +87,7 @@ export interface IPluginCommand<A = {}> extends IPlugin {
    * @param args Positional and named operands declared by the command definition
    * @param contexts Array of context values corresponding to the command's `contexts` declaration
    */
-  action: (args: A, contexts: string[]) => Promise<ICommandResult>;
+  action: (args: A, contexts: C) => Promise<ICommandResult>;
 }
 /**
  * Single command definition type. Kept as an alias for backward compatibility;
