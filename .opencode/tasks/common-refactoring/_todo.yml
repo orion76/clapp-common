@@ -21,24 +21,24 @@ items:
     group: а
     text: 'Перенести formatter-типы из `plugin-types/command/formatter/` в `plugin-types/formatter/` (устранить дефект ревьюера о расположении типов в выделенной секции).'
     executor: coder
-    status: todo
+    status: done
   - id: а4
     group: а
     text: 'Обновить barrel-файлы (public-api.ts, index.ts): добавить экспорт formatter-типов из @clapp/common, устранить дефект про discoverability (types должны быть видны напрямую).'
     executor: coder
-    status: todo
+    status: done
   - id: а5
     group: а
     text: 'Убрать @clapp/command из зависимостей common/core и добавить runtime-зависимости @orion76/node-plugin, inversify, reflect-metadata.'
     executor: coder
-    status: todo
+    status: done
   - id: а6
     group: а
     text: 'Проверить инварианты: у common нет зависимости от core, у core есть зависимость от common.'
     executor: coder
-    status: todo
+    status: done
   - id: а7
     group: а
     text: 'Проверить, что formatter-типы теперь расположены в plugin-types/formatter, а не в command/formatter; обновить внутренние импорты в plugin-types и перепроверить barrel-экспорты.'
     executor: coder
-    status: todo
+    status: done
