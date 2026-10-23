@@ -1,7 +1,7 @@
 import { NodePluginBase } from '@orion76/node-plugin';
 import { inject } from 'inversify';
 
-import { EVENT_BUS_TOKEN } from '../tokens';
+import { EVENT_BUS_TOKEN } from '../../tokens';
 import { IClappLifecycleMap, IEventBus } from '../../types/events';
 import { ICommandResult, IPluginCommand, IPluginCommandDefinition } from './types';
 
