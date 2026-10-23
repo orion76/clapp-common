@@ -3,4 +3,5 @@
  * provided by the host application and the data types they render.
  */
 
-export * from './formatter';
+export * from './base';
+export * from './types';

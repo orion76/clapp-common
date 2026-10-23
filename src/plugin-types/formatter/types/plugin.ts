@@ -1,4 +1,4 @@
-import { IPlugin, IPluginDefinition } from '@orion76/plugin';
+import { IPluginDefinition, IPlugin } from '@orion76/plugin';
 
 /**
  * Formatter plugin definition. Besides the base plugin fields a formatter
@@ -10,14 +10,6 @@ import { IPlugin, IPluginDefinition } from '@orion76/plugin';
 export interface IPluginFormatterDefinition<K extends string = string> extends IPluginDefinition {
   kind: K;
 }
-
-/**
- * Authoring-time formatter definition. `pluginClass` is attached by the
- * `@NodePlugin` decorator, so it is omitted from the object the author writes.
- * @template K Formatter kind
- */
-export type IPluginFormatterDefinitionData<K extends string = string> = Omit<IPluginFormatterDefinition<K>, 'pluginClass'>;
-
 /**
  * Formatter plugin instance: turns data into a string. Which styling the string
  * carries is up to the formatter set a host configures — the terminal formatters
@@ -31,3 +23,10 @@ export interface IPluginFormatter<D = unknown> extends IPlugin {
   definition: IPluginFormatterDefinition;
   format(data: D): Promise<string>;
 }
+
+/**
+ * Authoring-time formatter definition. `pluginClass` is attached by the
+ * `@NodePlugin` decorator, so it is omitted from the object the author writes.
+ * @template K Formatter kind
+ */
+export type IPluginFormatterDefinitionData<K extends string = string> = Omit<IPluginFormatterDefinition<K>, 'pluginClass'>;

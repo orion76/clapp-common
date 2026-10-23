@@ -4,17 +4,13 @@
  * `formatter/`), общие константы типов/видов и plugin-manager токены.
  * All names re-exported here are available from `common/src/plugin-types/`.
  */
-export * from './command/plugin';
-export * from './command/base';
-export * from './command/formatter';
-export * from './context/context';
-export * from './context/base';
-export * from './formatter/formatter';
-export * from './formatter/base';
+export * from './types';
 export * from './constants';
 export * from './tokens';
 
+
 // Re-exports for command plugin types (compatible with original command package)
-export { PluginCommandBase } from './command/base';
-export { UFormatterKind, ITableData, IOrderedListData, IKeyValueData, IKeyValuePair, IKeyValueSection, TTableCell, TTableRow, TTableRecordRow, TListMarker, IOrderedListItem, TKeyValuePairValue, IFormatterDataMap, TFormatterData, IFormatterCommandDefinitionData } from './command/formatter';
+
+export * from './formatter';
 export * from './command';
+export * from './context';

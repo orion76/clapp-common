@@ -1,6 +1,7 @@
 import { NodePluginBase } from '@orion76/node-plugin';
+import { IPluginFormatterDefinition, IPluginFormatter } from './types/plugin';
 
-import type { IPluginFormatter, IPluginFormatterDefinition } from './formatter';
+
 
 /**
  * Base class of a formatter plugin. A formatter receives data and returns a

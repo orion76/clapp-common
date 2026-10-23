@@ -1,14 +1,12 @@
 import type { IPluginManager } from '@orion76/node-plugin';
 import type { ServiceIdentifier } from 'inversify';
 
-import type { IPluginCommand } from './command/plugin';
-import type { IPluginContext } from './context/context';
-import type { IPluginFormatter } from './formatter/formatter';
+import type { IPluginCommand } from './command/types';
+import type { IPluginContext } from './context/types';
+import { IPluginFormatter } from './formatter';
 
-/**
- * Injection token of the shared asynchronous event bus registered by `Clapp`.
- */
-export const EVENT_BUS_TOKEN = Symbol('clapp.event.bus');
+
+
 
 /**
  * Injection token of the command plugin manager registered by `Clapp`.

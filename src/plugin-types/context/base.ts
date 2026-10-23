@@ -1,6 +1,6 @@
 import { NodePluginBase } from '@orion76/node-plugin';
 
-import type { IPluginContext, IPluginContextDefinition } from './context';
+import type { IPluginContext, IPluginContextDefinition } from './types';
 
 /**
  * Base class for context plugins. A context contributes a value (process, cwd,

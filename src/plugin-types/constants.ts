@@ -1,14 +1,7 @@
 export const PLUGIN_COMMAND_TYPE = 'PLUGIN_COMMAND';
 export const PLUGIN_CONTEXT_TYPE = 'PLUGIN_CONTEXT';
 export const PLUGIN_ARGUMENT_TYPE = 'PLUGIN_ARGUMENT';
-/**
- * Formatter plugin type: a formatter turns data into a string (see
- * `IPluginFormatter`). A host picks a formatter set by the discovery patterns
- * of this type. All sets share the type and the plugin contract and differ in
- * their output and in their modules: the terminal formatters write for a
- * terminal, the MCP formatters write for the protocol stream of an MCP server.
- */
-export const PLUGIN_FORMATTER_TYPE = 'PLUGIN_FORMATTER';
+
 
 /**
  * Command kind: a query for information (project data or state) without side
@@ -31,8 +24,12 @@ export const COMMAND_KIND_PROMPT = 'prompt';
  */
 export const COMMAND_KIND_GROUP = 'group';
 
-/** The three kinds of a project command, each matching an MCP surface. */
-export type UCommandKind = typeof COMMAND_KIND_RESOURCE | typeof COMMAND_KIND_TOOL | typeof COMMAND_KIND_PROMPT;
+/**
+ * Formatter plugin type: a formatter turns data into a string (see
+ * `IPluginFormatter`). A host picks a formatter set by the discovery patterns
+ * of this type. All sets share the type and the plugin contract and differ in
+ * their output and in their modules: the terminal formatters write for a
+ * terminal, the MCP formatters write for the protocol stream of an MCP server.
+ */
+export const PLUGIN_FORMATTER_TYPE = 'PLUGIN_FORMATTER';
 
-/** Value of the `kind` field in a command definition: a command kind or the group marker. */
-export type UCommandDefinitionKind = UCommandKind | typeof COMMAND_KIND_GROUP;

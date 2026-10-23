@@ -1,4 +1,5 @@
-import { ICommandResult } from './plugin';
+import { ICommandResult } from "../plugin-types";
+
 
 /**
  * Describes a single application lifecycle hook: the tuple of arguments passed

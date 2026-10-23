@@ -1,6 +1,7 @@
 import { IPlugin, IPluginDefinition, IType } from '@orion76/plugin';
-import { ICommandArgument, ICommandOption } from './commander';
-import { PLUGIN_COMMAND_TYPE, PLUGIN_CONTEXT_TYPE, PLUGIN_FORMATTER_TYPE, type UCommandDefinitionKind } from '../constants';
+import { ICommandArgument, ICommandOption } from '../../types/commander';
+import { PLUGIN_COMMAND_TYPE, PLUGIN_CONTEXT_TYPE, PLUGIN_FORMATTER_TYPE } from '../constants';
+import { UCommandDefinitionKind } from '../types';
 export type UPluginTypes = typeof PLUGIN_COMMAND_TYPE | typeof PLUGIN_CONTEXT_TYPE | typeof PLUGIN_FORMATTER_TYPE;
 
 export interface ICommandConfig {
@@ -59,7 +60,7 @@ export interface IPluginCommandDefinition<A = {}, C = {}> extends IPluginDefinit
    * instead of printing it; the core resolves the formatter plugin with this id
    * and writes its output to stdout. The type is a plain string here, because
    * this package must not depend on the list of formatters — command authors get
-   * the strict union `UFormatterKind` from `@clapp/common`.
+   * the strict union `UFormatterKind` from `plugin-types/command/formatter`.
    */
   formatter?: string;
   /**
