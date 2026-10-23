@@ -42,3 +42,69 @@ reports:
     text: |
       Formatter-типы подтверждены в plugin-types/formatter/formatter.ts; импортов @clapp/command
       в src/ common нет; barrel-экспорты указывают на новое местоположение. Отчёт кодера result: passed.
+  - ref: а1
+    status: done
+    by: planner
+    at: 2026-10-23T16:35
+    report_ref: reviewer-planner-2026-10-23-1630.yml
+    text: |
+      Ревью barrel-экспортов выполнено (reviewer, result: failed). Цепочка barrel замкнута, дублей имён
+      нет, публичный API содержит plugin-types; импортов @clapp/command в common нет. Выявлен потерянный
+      тип IFormatterCommandDefinitionData и расхождения отчётов с деревом.
+  - ref: а2
+    status: done
+    by: planner
+    at: 2026-10-23T16:35
+    report_ref: reviewer-planner-2026-10-23-1630.yml
+    text: |
+      Расположение formatter-типов проверено: всё в src/plugin-types/formatter/ (base.ts, types/plugin.ts,
+      types/types-map.ts, types/formatters/*), каталога command/formatter нет, внутренние импорты
+      корректны, циклов нет. Подтверждено ревьюером.
+  - ref: а3
+    status: todo
+    by: planner
+    at: 2026-10-23T16:35
+    report_ref: reviewer-planner-2026-10-23-1630.yml
+    text: |
+      Возвращено из done в todo по итогам ревью (result: failed): при разбиении типов утрачен
+      IFormatterCommandDefinitionData, потеряны JSDoc у UFormatterKind/TFormatterData/TTableCell и др.
+  - ref: а4
+    status: todo
+    by: planner
+    at: 2026-10-23T16:35
+    report_ref: reviewer-planner-2026-10-23-1630.yml
+    text: |
+      Возвращено из done в todo по итогам ревью (result: failed): IFormatterCommandDefinitionData
+      отсутствует в публичном API; вводящие в заблуждение комментарии в public-api.ts и
+      plugin-types/command/index.ts.
+  - ref: а5
+    status: done
+    by: planner
+    at: 2026-10-23T16:35
+    report_ref: reviewer-planner-2026-10-23-1630.yml
+    text: |
+      Ревьюер подтвердил: в common нет @clapp/command; dependencies — tslib, @orion76/node-plugin,
+      inversify, reflect-metadata; peer — @orion76/plugin. Статус оставлен done.
+  - ref: а6
+    status: done
+    by: planner
+    at: 2026-10-23T16:35
+    report_ref: reviewer-planner-2026-10-23-1630.yml
+    text: |
+      Инварианты подтверждены ревьюером: у common нет @clapp/*, у core есть @clapp/common в
+      peerDependencies. Статус оставлен done.
+  - ref: а7
+    status: done
+    by: planner
+    at: 2026-10-23T16:35
+    report_ref: reviewer-planner-2026-10-23-1630.yml
+    text: |
+      Ревьюер подтвердил: formatter-типы в plugin-types/formatter, внутренние импорты корректны,
+      циклов нет. Замечание о расхождении отчётов с деревом вынесено отдельно. Статус оставлен done.
+  - ref: а
+    status: todo
+    by: planner
+    at: 2026-10-23T16:35
+    report_ref: reviewer-planner-2026-10-23-1630.yml
+    text: |
+      Группа остаётся в todo: пункты а3 и а4 возвращены в работу по дефектам ревью.

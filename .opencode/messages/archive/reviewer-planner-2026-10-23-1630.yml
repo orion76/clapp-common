@@ -1,0 +1,103 @@
+task: common-refactoring
+target: /home/pasha/my/clapp/packages/common
+role: reviewer
+goal: 'Покрыть пункты а1–а2 (barrel-экспорты и расположение formatter-типов) и сверить фактическое
+  состояние дерева packages/common с закрытыми пунктами а3–а7; файлы: src/public-api.ts, src/index.ts,
+  src/types/index.ts, src/plugin-types/index.ts, src/plugin-types/formatter/**, package.json'
+type: general
+result: failed
+checked:
+  - 'а1. Barrel-экспорты: public-api.ts → ./tokens, ./types, ./plugin-types; index.ts → ./public-api;
+    types/index.ts → ./common, ./commander, ./events; plugin-types/index.ts → ./types, ./constants,
+    ./tokens, ./formatter, ./command, ./context. Цепочка замкнута, публичный API содержит plugin-types
+    (до правки public-api.ts не экспортировал plugin-types вовсе — discoverability исправлена).'
+  - 'а1. Дублей имён в графе barrel-экспортов нет: полный перечень export-объявлений src/common
+    (tokens.ts, types/*, plugin-types/{types,constants,tokens,command/*,context/*,formatter/*})
+    пересечений не содержит; повторные `export *` в plugin-types/index.ts на command/base и
+    formatter-типы устранены.'
+  - 'а1. Импортов @clapp/command в packages/common/src и в package.json нет (grep пуст); упоминания
+    @clapp/command остались только в кэше сборки packages/common/.rollup.cache (в .gitignore,
+    не отслеживается).'
+  - 'а1. IPluginFormatter, IPluginFormatterDefinition, IPluginFormatterDefinitionData,
+    PluginFormatterBase, UFormatterKind, TFormatterData, IFormatterDataMap, ITableData,
+    IOrderedListData, IKeyValueData и вспомогательные типы доступны из @clapp/common через
+    public-api → plugin-types → formatter.'
+  - 'а1. IFormatterCommandDefinitionData (сужение formatter до UFormatterKind) в публичном API
+    ОТСУТСТВУЕТ — тип потерян при разбиении файла (см. defects 1).'
+  - 'а2. Расположение formatter-типов корректно: всё в packages/common/src/plugin-types/formatter/
+    (base.ts — PluginFormatterBase; types/plugin.ts — IPluginFormatterDefinition, IPluginFormatter,
+    IPluginFormatterDefinitionData; types/types-map.ts — UFormatterKind, IFormatterDataMap,
+    TFormatterData; types/formatters/{table,ordered-list,key-value}.ts — data-типы по видам).
+    Каталога plugin-types/command/formatter/ больше нет, файл plugin-types/command/formatter.ts
+    удалён (коммит c5a0d23), packages/command/ в монорепозитории отсутствует.'
+  - 'а3/а7. Внутренние импорты plugin-types корректны: formatter/base.ts → ./types/plugin,
+    types/types-map.ts → ./formatters/*, plugin-types/tokens.ts → ./command/types, ./context/types,
+    ./formatter; циклов импортов нет (formatter не импортирует command).'
+  - 'а4. formatter-типы видны напрямую из @clapp/common (public-api.ts:12 `export * from
+    ''./plugin-types''`), потребители (@clapp/core: plugins/formatters/**, plugins/mcp-formatters/**)
+    импортируют ITableData/IOrderedListData/IKeyValueData/PluginFormatterBase из @clapp/common.'
+  - 'а5. package.json common: dependencies — tslib, @orion76/node-plugin ^0.3.0, inversify ^8.2.3,
+    reflect-metadata ^0.2.2; peerDependencies — @orion76/plugin ^0.3.0; @clapp/command отсутствует.'
+  - 'а6. Инварианты выполнены: у common нет зависимостей от @clapp/* (ни в одной секции
+    package.json); у core есть @clapp/common ^0.0.1 в peerDependencies.'
+  - 'а7. Отчёты о закрытии а3–а7 в <task>/_reports.yml присутствуют, но их содержание расходится
+    с фактическим деревом (см. defects 9): в отчётах фигурируют plugin-types/formatter/formatter.ts
+    и IFormatterCommandDefinitionData, которых в коде нет.'
+  - 'DoD «core реэкспортирует перенесённые сущности без дублирования» НЕ выполнен: в
+    packages/core/src/formatters/formatter.base.ts лежит копия PluginFormatterBase (см. defects 2).'
+  - 'Профиль задачи — step: сборка/тесты в объём не входят, поэтому они не запускались и их
+    отчёты не сверялись; документация и тесты по _task.md вне рамок.'
+defects:
+  - 'packages/common/src/plugin-types/formatter/types/types-map.ts (потерянный тип): при разбиении
+    packages/common/src/plugin-types/command/formatter.ts на formatter/types/** утрачен
+    IFormatterCommandDefinitionData<A, C> = Omit<IPluginCommandDefinitionData<A, C>, ''formatter''> &
+    { formatter?: UFormatterKind } (был в удалённом файле, строка 145). Тип требуется п.2 требований
+    _task.md и используется в инструкции для ИИ .ai/prompts/use-plugin.md:167-169,201 — пример
+    авторинга команды с ним теперь не скомпилируется. Следствие: IPluginCommandDefinition.formatter
+    остаётся plain string, строгого сужения для авторов команд нет.'
+  - 'packages/core/src/formatters/formatter.base.ts:1-25: побайтовая копия
+    packages/common/src/plugin-types/formatter/base.ts (тот же JSDoc и тело класса PluginFormatterBase).
+    Шесть плагинов ядра (packages/core/src/plugins/formatters/*/*.plugin.ts:7,
+    packages/core/src/plugins/mcp-formatters/*/*.plugin.ts:7) импортируют локальную копию, а не
+    PluginFormatterBase из @clapp/common — прямое нарушение DoD «core реэкспортирует перенесённые
+    сущности без дублирования». Требуется заменить копию реэкспортом из @clapp/common.'
+  - 'packages/common/src/plugin-types/command/types.ts:63: устаревший комментарий ссылается на
+    несуществующий путь `plugin-types/command/formatter`; после переноса путь — `plugin-types/formatter`
+    (или `@clapp/common`). Комментарий адресован ИИ-моделям, поэтому ошибка пути критична.'
+  - 'packages/common/src/plugin-types/command/index.ts:1-3: JSDoc описывает «Formatter contract for
+    command authors…» на barrel-файле command-типов — остаток от удалённого command/formatter.ts;
+    вводит в заблуждение при чтении barrel-а.'
+  - 'packages/common/src/public-api.ts:11: комментарий «Formatter data types - re-exported from
+    plugin-types/formatter» стоит перед `export * from ''./plugin-types''`, который реэкспортирует
+    весь plugin-слой (command/context/formatter/constants/tokens), а не только formatter-типы.'
+  - 'JSDoc потерян при разбиении типов: UFormatterKind, TFormatterData (types/types-map.ts),
+    TTableCell, TTableRow, TTableRecordRow (types/formatters/table.ts), TListMarker
+    (types/formatters/ordered-list.ts), TKeyValuePairValue (types/formatters/key-value.ts) остались
+    без описаний, которые были в исходном файле (в т.ч. «null/undefined рисуются пустой ячейкой»
+    для TTableCell и объяснение идентификатора форматтера для UFormatterKind).'
+  - 'Стиль/формат: packages/common/src/plugin-types/formatter/base.ts:23 (138 симв.) и
+    packages/common/src/plugin-types/formatter/types/plugin.ts:32 (123 симв.) превышают printWidth 120
+    из корневого prettier-конфига; в formatter/base.ts:3-5, types/formatters/key-value.ts:1 и
+    types/formatters/ordered-list.ts:1 остались лишние пустые строки.'
+  - 'Типы импортируются как значения: packages/common/src/plugin-types/formatter/base.ts:2
+    (`import { IPluginFormatterDefinition, IPluginFormatter }`) и
+    packages/common/src/plugin-types/tokens.ts:6 (`import { IPluginFormatter }`) — без `import type`,
+    в отличие от остальных файлов пакета (verbatimModuleSyntax не включён, поэтому на рантайм не влияет).'
+  - 'Расхождение отчёта кодера и `_reports.yml` с фактическим состоянием: отчёты а3/а4/а7
+    (messages/archive/coder-planner-2026-10-22-1609.yml, tasks/common-refactoring/_reports.yml)
+    утверждают наличие `plugin-types/formatter/formatter.ts` и `IFormatterCommandDefinitionData`,
+    а также реэкспорт formatter-типов из `types/index.ts`; фактически дерево — `formatter/types/**`,
+    IFormatterCommandDefinitionData отсутствует, а `src/types/index.ts` экспортирует только
+    common/commander/events.'
+  - 'Вне рамок задачи, к сведению: .ai/prompts/use-plugin.md:167-168 всё ещё указывает `UFormatterKind`
+    из `@clapp/command` (пакет удалён), а .ai/prompts/library.md не описывает новое расположение
+    plugin-types/formatter/**. Документация по _task.md вне объёма этой задачи — решение за planner.'
+commands:
+  - 'find packages/common/src -type f | sort — дерево подтверждает plugin-types/formatter/{base.ts,index.ts,types/{plugin.ts,types-map.ts,formatters/*.ts}}, каталога plugin-types/command/formatter нет'
+  - 'grep -rn "@clapp/" packages/common/src packages/common/package.json packages/common/tsconfig*.json — совпадений с @clapp/command нет (только имя самого пакета и JSDoc)'
+  - 'grep -rn "^export " packages/common/src — полный перечень экспортов, дублей имён в графе barrel нет'
+  - 'git show c5a0d23^:packages/common/src/plugin-types/command/formatter.ts | grep -n "^export" — 15 экспортов, включая IFormatterCommandDefinitionData (строка 145); в новом дереве 14 из них + IPluginFormatter*/PluginFormatterBase'
+  - 'grep -rn "PluginFormatterBase" packages — core использует локальную копию ../../../formatters/formatter.base, common экспортирует свою из plugin-types/formatter/base.ts'
+  - 'grep -rn "IFormatterCommandDefinitionData" . — в живом коде не используется, встречается только в .ai/prompts/use-plugin.md и архивных/бэкап-файлах (tmp/, .history/)'
+  - 'python3 -c "json.load(open(''packages/core/package.json''))" — у core @clapp/common ^0.0.1 в peerDependencies; у common секции dependencies/peerDependencies/devDependencies без @clapp/*'
+  - 'awk ''length > 120'' по файлам plugin-types/formatter/** — formatter/base.ts:23 (138), types/plugin.ts:32 (123)'
