@@ -13,7 +13,7 @@ import { getAppMeta } from '../app-meta';
 export class CurrentProjectContext extends PluginContextBase<string, [string, string]> implements IPluginContext<string, [string, string]> {
   async getContext(cwd: string, userHome: string): Promise<string> {
     const currentProjectRoot = getProjectRoot(cwd, userHome);
-    if (currentProjectRoot === null) {
+    if (currentProjectRoot === undefined) {
       throw new Error(`Project root not found. cwd:${cwd}, userHome:${userHome}`);
     }
     return currentProjectRoot;
