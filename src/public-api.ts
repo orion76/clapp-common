@@ -7,6 +7,8 @@
 export * from './tokens';
 export * from './types';
 
-
 // Formatter data types - re-exported from plugin-types/formatter
 export * from './plugin-types';
+
+// App meta (library shared with the context plugins)
+export * from './plugins/context/app-meta';
