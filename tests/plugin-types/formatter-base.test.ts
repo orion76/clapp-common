@@ -18,8 +18,8 @@ const definition: IPluginFormatterDefinition<'table'> = {
 @NodePlugin(definition)
 @injectable()
 class TestFormatter extends PluginFormatterBase<{ key: string }> {
-  format(data: { key: string }): Promise<string> {
-    return Promise.resolve(`${data.key}=v`);
+  async format(data: { key: string }): Promise<string> {
+    return `${data.key}=v`;
   }
 }
 

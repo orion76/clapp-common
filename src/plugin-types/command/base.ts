@@ -13,7 +13,7 @@ import { ICommandResult, IPluginCommand, IPluginCommandDefinition } from './type
  */
 export abstract class PluginCommandBase<A = {}, C = {}>
   extends NodePluginBase<IPluginCommandDefinition<A, C>>
-  implements IPluginCommand<A,C>
+  implements IPluginCommand<A, C>
 {
   /**
    * Shared asynchronous event bus, delivered by the DI container through
@@ -31,7 +31,7 @@ export abstract class PluginCommandBase<A = {}, C = {}>
    * @param contexts Array of context values corresponding to the command's `contexts` declaration
    */
   abstract action(args: A, contexts: C): Promise<ICommandResult>;
-  getArguments<O extends object = object>(args: string[], opts: O): Promise<A> {
+  async getArguments<O extends object = object>(args: string[], opts: O): Promise<A> {
     const _args = { ...opts } as Record<string, any>;
     if (this.definition.config.arguments) {
       this.definition.config.arguments.forEach((arg, index) => {
@@ -39,6 +39,6 @@ export abstract class PluginCommandBase<A = {}, C = {}>
         _args[name] = args[index];
       });
     }
-    return Promise.resolve(_args as A);
+    return _args as A;
   }
 }

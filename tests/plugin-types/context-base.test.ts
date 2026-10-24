@@ -17,8 +17,8 @@ const definition: IPluginContextDefinition = {
 @NodePlugin(definition)
 @injectable()
 class TestContext extends PluginContextBase<{ cwd: string }, [string]> {
-  getContext(dir: string): Promise<{ cwd: string }> {
-    return Promise.resolve({ cwd: dir });
+  async getContext(dir: string): Promise<{ cwd: string }> {
+    return { cwd: dir };
   }
 }
 

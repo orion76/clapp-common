@@ -31,8 +31,8 @@ const EMPTY_BUS: IEventBus<IClappLifecycleMap> = {
 @NodePlugin(definition)
 @injectable()
 class ReadFileCommand extends PluginCommandBase<{ path: string; encoding: string }, []> {
-  action(args: { path: string; encoding: string }, contexts: []): Promise<ICommandResult> {
-    return Promise.resolve({ success: true, data: args.path });
+  async action(args: { path: string; encoding: string }, contexts: []): Promise<ICommandResult> {
+    return { success: true, data: args.path };
   }
 }
 
