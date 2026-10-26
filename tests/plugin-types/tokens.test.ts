@@ -4,7 +4,7 @@ import {
   COMMAND_MANAGER_TOKEN,
   CONTEXT_MANAGER_TOKEN,
   FORMATTER_MANAGER_TOKEN,
-} from '../../src/plugin-types/tokens.js';
+} from '../../src/plugin-types';
 
 describe('plugin-manager tokens', () => {
   it('exports command manager token as a symbol', () => {

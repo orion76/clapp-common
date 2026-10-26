@@ -6,9 +6,10 @@ import { NodePlugin, PLUGIN_DEFINITION } from '@orion76/node-plugin';
 
 import { PluginCommandBase } from '../../src/plugin-types/command/base.js';
 import type { ICommandResult, IPluginCommandDefinitionData } from '../../src/plugin-types/command/types.js';
-import { PLUGIN_COMMAND_TYPE } from '../../src/plugin-types/constants.js';
+
 import { EVENT_BUS_TOKEN } from '../../src/tokens.js';
 import type { IClappLifecycleMap, IEventBus } from '../../src/types/events.js';
+import { PLUGIN_COMMAND_TYPE } from '../../dist/clapp-common.js';
 
 const definition: IPluginCommandDefinitionData = {
   type: PLUGIN_COMMAND_TYPE,
@@ -23,15 +24,15 @@ const definition: IPluginCommandDefinitionData = {
 // test binds a stub so the container can resolve the class without a runtime.
 const EMPTY_BUS: IEventBus<IClappLifecycleMap> = {
   hook: async () => undefined,
-  on: () => () => {},
-  once: () => () => {},
-  off: () => {},
+  on: () => () => { },
+  once: () => () => { },
+  off: () => { },
 };
 
 @NodePlugin(definition)
 @injectable()
-class ReadFileCommand extends PluginCommandBase<{ path: string; encoding: string }, []> {
-  async action(args: { path: string; encoding: string }, contexts: []): Promise<ICommandResult> {
+class ReadFileCommand extends PluginCommandBase<{ path: string; encoding: string }, {}> {
+  async action(args: { path: string; encoding: string }): Promise<ICommandResult> {
     return { success: true, data: args.path };
   }
 }

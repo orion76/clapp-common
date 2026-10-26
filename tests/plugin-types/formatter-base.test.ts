@@ -1,12 +1,13 @@
 import { describe, expect, it } from '@jest/globals';
 import 'reflect-metadata';
 
-import { Container, injectable } from 'inversify';
 import { NodePlugin, PLUGIN_DEFINITION } from '@orion76/node-plugin';
+import { Container, injectable } from 'inversify';
 
 import { PluginFormatterBase } from '../../src/plugin-types/formatter/base.js';
 import type { IPluginFormatterDefinition } from '../../src/plugin-types/formatter/types/plugin.js';
-import { PLUGIN_FORMATTER_TYPE } from '../../src/plugin-types/constants.js';
+import { PLUGIN_FORMATTER_TYPE } from '../../src/plugin-types/formatter/constants.js';
+
 
 const definition: IPluginFormatterDefinition<'table'> = {
   type: PLUGIN_FORMATTER_TYPE,

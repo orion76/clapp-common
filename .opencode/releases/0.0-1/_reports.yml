@@ -1,0 +1,31 @@
+# 0.0-1: журнал отчётов о проделанной работе
+task: 0.0-1
+version: 1
+reports:
+  - ref: г1
+    status: done
+    by: planner
+    at: 2026-10-24T13:05
+    report_ref: tester-planner-2026-10-24-1258.yml
+    text: >-
+      npm run build:common → exit 0, dist создан (dist в .gitignore). В логе rollup — TS2322 warning
+      по перенесённому current-project-root.context.ts (вынесено в отдельную задачу кодера).
+  - ref: г2
+    status: done
+    by: planner
+    at: 2026-10-24T13:05
+    report_ref: tester-planner-2026-10-24-1258.yml
+    text: >-
+      npm run test:jest -w @clapp/common → 6 suites / 30 tests passed, exit 0. Оговорки: зелёный
+      прогон требует предсобранных packages/common/dist и packages/utils/dist (jest резолвит
+      @clapp/* через node_modules→dist, нет moduleNameMapper на src); покрытия context-плагинов и
+      app-meta нет.
+  - ref: г3
+    status: todo
+    by: planner
+    at: 2026-10-24T13:05
+    report_ref: tester-planner-2026-10-24-1258.yml
+    text: >-
+      npx tsc --noEmit -p packages/common/tsconfig.json → exit 2: 1 ошибка в перенесённом
+      current-project-root.context.ts (TS2322) + 5 предсуществующих в packages/utils. Пункт возвращён
+      в todo; исправление — задача fix-common-build-typecheck (кодер).

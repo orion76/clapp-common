@@ -1,12 +1,12 @@
 import { describe, expect, it } from '@jest/globals';
 import 'reflect-metadata';
 
-import { Container, injectable } from 'inversify';
 import { NodePlugin, PLUGIN_DEFINITION } from '@orion76/node-plugin';
+import { Container, injectable } from 'inversify';
 
 import { PluginContextBase } from '../../src/plugin-types/context/base.js';
+import { PLUGIN_CONTEXT_TYPE } from '../../src/plugin-types/context/constants.js';
 import type { IPluginContextDefinition } from '../../src/plugin-types/context/types.js';
-import { PLUGIN_CONTEXT_TYPE } from '../../src/plugin-types/constants.js';
 
 const definition: IPluginContextDefinition = {
   type: PLUGIN_CONTEXT_TYPE,
@@ -14,10 +14,14 @@ const definition: IPluginContextDefinition = {
   label: 'Test Context',
 };
 
+interface IArguments {
+  cwd: string;
+}
+
 @NodePlugin(definition)
 @injectable()
-class TestContext extends PluginContextBase<{ cwd: string }, [string]> {
-  async getContext(dir: string): Promise<{ cwd: string }> {
+class TestContext extends PluginContextBase<IArguments> {
+  async getContext(dir: string): Promise<IArguments> {
     return { cwd: dir };
   }
 }

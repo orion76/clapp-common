@@ -40,15 +40,26 @@ items:
   - id: г1
     group: г
     text: 'Сборка @clapp/common (npm run build --workspace=@clapp/common) — зелёная, после переноса plugins (task: core-plugins-move-to-common)'
-    status: todo
+    status: done
+    note: |-
+      exit 0, dist создан. В логе rollup — TS2322 warning по перенесённому
+      current-project-root.context.ts (см. задачу fix-common-build-typecheck).
   - id: г2
     group: г
     text: 'Юнит-тесты @clapp/common (npm run test:jest -w @clapp/common) — зелёные, покрытие перенесённых плагинов (task: core-plugins-move-to-common)'
-    status: todo
+    status: done
+    note: |-
+      6 suites / 30 tests passed (exit 0), но только при наличии предсобранных
+      packages/common/dist и packages/utils/dist (jest резолвит @clapp/* через node_modules→dist,
+      без moduleNameMapper на src). Покрытия context-плагинов/app-meta нет (информационно).
   - id: г3
     group: г
     text: 'Typecheck @clapp/common — зелёный (npm run typecheck/tsc) (task: core-plugins-move-to-common)'
     status: todo
+    note: |-
+      FAILED: npx tsc --noEmit -p packages/common/tsconfig.json → exit 2, 6 ошибок: 1 в перенесённом
+      current-project-root.context.ts (TS2322) + 5 предсуществующих в packages/utils. См. задачу
+      fix-common-build-typecheck.
   - id: д1
     group: д
     text: Подготовить релизный коммит/PR

@@ -1,15 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
+import { COMMAND_KIND_GROUP, COMMAND_KIND_PROMPT, COMMAND_KIND_RESOURCE, COMMAND_KIND_TOOL, PLUGIN_COMMAND_ARGUMENT_TYPE, PLUGIN_COMMAND_TYPE, PLUGIN_CONTEXT_TYPE, PLUGIN_FORMATTER_TYPE } from '../../src';
 
-import {
-  PLUGIN_COMMAND_TYPE,
-  PLUGIN_CONTEXT_TYPE,
-  PLUGIN_ARGUMENT_TYPE,
-  PLUGIN_FORMATTER_TYPE,
-  COMMAND_KIND_RESOURCE,
-  COMMAND_KIND_TOOL,
-  COMMAND_KIND_PROMPT,
-  COMMAND_KIND_GROUP,
-} from '../../src/plugin-types/constants.js';
+
 
 describe('plugin type constants', () => {
   it('defines the command plugin type', () => {
@@ -21,7 +13,7 @@ describe('plugin type constants', () => {
   });
 
   it('defines the argument plugin type', () => {
-    expect(PLUGIN_ARGUMENT_TYPE).toBe('PLUGIN_ARGUMENT');
+    expect(PLUGIN_COMMAND_ARGUMENT_TYPE).toBe('PLUGIN_COMMAND_ARGUMENT');
   });
 
   it('defines the formatter plugin type', () => {
@@ -29,7 +21,7 @@ describe('plugin type constants', () => {
   });
 
   it('keeps all plugin type constants distinct', () => {
-    const types = [PLUGIN_COMMAND_TYPE, PLUGIN_CONTEXT_TYPE, PLUGIN_ARGUMENT_TYPE, PLUGIN_FORMATTER_TYPE];
+    const types = [PLUGIN_COMMAND_TYPE, PLUGIN_CONTEXT_TYPE, PLUGIN_COMMAND_ARGUMENT_TYPE, PLUGIN_FORMATTER_TYPE];
     expect(new Set(types).size).toBe(types.length);
   });
 });
