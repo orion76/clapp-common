@@ -1,0 +1,2 @@
+
+export const PLUGIN_CONTEXT_TYPE = 'PLUGIN_CONTEXT';

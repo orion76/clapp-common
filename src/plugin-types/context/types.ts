@@ -1,10 +1,14 @@
 import { IPlugin, IPluginDefinition } from '@orion76/plugin';
 
-export interface IPluginContextDefinition<C = unknown> extends IPluginDefinition {
+export interface IPluginContextDefinition extends IPluginDefinition {
   dependencies?: string[];
 }
 
-export interface IPluginContext<C = unknown, A extends unknown[] = unknown[]> extends IPlugin {
-  definition: IPluginContextDefinition<C>;
-  getContext: (...args: A) => Promise<C>;
+export interface IPluginContext<C extends unknown = unknown> extends IPlugin {
+  definition: IPluginContextDefinition;
+  getContext(...args: unknown[]): Promise<C>;
+}
+
+export interface IContextService<M extends Record<string, unknown> = {}> {
+  get(token: keyof M): Promise<M[keyof M]>
 }

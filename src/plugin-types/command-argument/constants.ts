@@ -1,0 +1,8 @@
+
+export const PLUGIN_COMMAND_ARGUMENT_TYPE = 'PLUGIN_COMMAND_ARGUMENT';
+
+
+
+
+
+

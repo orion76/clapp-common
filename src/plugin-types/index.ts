@@ -5,12 +5,7 @@
  * All names re-exported here are available from `common/src/plugin-types/`.
  */
 export * from './types';
-export * from './constants';
-export * from './tokens';
-
-
-// Re-exports for command plugin types (compatible with original command package)
-
 export * from './formatter';
 export * from './command';
+export * from './command-argument';
 export * from './context';
