@@ -8,4 +8,4 @@ import { IContextService, IPluginContext } from './types';
  */
 
 export const CONTEXT_MANAGER_TOKEN: ServiceIdentifier<IPluginManager<IPluginContext>> = Symbol('CONTEXT_MANAGER');
-export const CONTEXT_SERVICE_TOKEN: ServiceIdentifier<IContextService<{}>> = Symbol('CONTEXT_SERVICE');
+export const CONTEXT_SERVICE_TOKEN: ServiceIdentifier<IContextService> = Symbol('CONTEXT_SERVICE');

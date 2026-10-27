@@ -1,7 +1,7 @@
 import type { IPluginManager } from '@orion76/node-plugin';
 import { inject, injectable } from 'inversify';
 import { CONTEXT_MANAGER_TOKEN } from './di-tokens';
-import { IContextService, IPluginContext, IPluginContextDefinition } from './types';
+import { IContextService, InjectableIdentifier, IPluginContext, IPluginContextDefinition } from './types';
 
 type IndexKey<M> = keyof M extends string ? keyof M : never
 
@@ -22,8 +22,8 @@ type IndexKey<M> = keyof M extends string ? keyof M : never
  * recreating the context. Cache refresh is out of scope.
  */
 @injectable()
-export class AppContext<M extends Record<string, unknown> = {}, K extends IndexKey<M> = IndexKey<M>> implements IContextService<M> {
-  private readonly _resolved = new Map<string, unknown>();
+export class AppContext<M extends Record<string, unknown> = {}, K extends IndexKey<M> = IndexKey<M>> implements IContextService {
+  private readonly _resolved = new Map<any, any>();
 
   @inject(CONTEXT_MANAGER_TOKEN) private readonly _pluginManager!: IPluginManager<IPluginContext>;
 
@@ -33,13 +33,13 @@ export class AppContext<M extends Record<string, unknown> = {}, K extends IndexK
    * @template T Resolved context value type
    * @param id Context id
    */
-  async get<T>(token: string): Promise<T> {
+  async get<T>(token: InjectableIdentifier<T>): Promise<T> {
     if (this._resolved.has(token)) {
-      const context = this._resolved.get(token)
+      const context = this._resolved.get(token);
       if (!context) {
         throw new Error(``);
       }
-      return context as T;
+      return context;
     }
 
     const definition = await this._pluginManager.getDefinition(token) as IPluginContextDefinition;
@@ -47,7 +47,7 @@ export class AppContext<M extends Record<string, unknown> = {}, K extends IndexK
 
     const value = await this._getContext(token);
     this._resolved.set(token, value);
-    return value as T;
+    return value;
   }
 
   /**
@@ -68,11 +68,11 @@ export class AppContext<M extends Record<string, unknown> = {}, K extends IndexK
    * @template T Resolved context value type
    * @param id Context id
    */
-  private async _getContext<T>(id: string): Promise<T> {
-    const plugin = await this._pluginManager.getInstance(id) as IPluginContext<M[K]>;
-    const dependencies = plugin.definition.dependencies as K[];
-    const args = dependencies ? await this._getDependenciesValues(dependencies) : [];
-    return plugin.getContext(...(args)) as T;
+  private async _getContext<T>(id: InjectableIdentifier<T>): Promise<T> {
+    const plugin = await this._pluginManager.getInstance(id) as IPluginContext<T>;
+    const dependencies = plugin.definition.dependencies ;
+    const args = dependencies ? await this._getDependenciesValues<T>(dependencies) : [] as T[];
+    return plugin.getContext(...args);
   }
 
   /**
@@ -80,7 +80,7 @@ export class AppContext<M extends Record<string, unknown> = {}, K extends IndexK
    * dependency is looked up in `_resolved` or created and cached there.
    * @param dependencies Context dependency ids
    */
-  private async _getDependenciesValues(dependencies: K[]): Promise<unknown[]> {
-    return Promise.all(dependencies.map((id) => this.get(id)));
+  private async _getDependenciesValues<T>(dependencies: InjectableIdentifier<T>[]): Promise<T[]> {
+    return Promise.all(dependencies.map((id) => this.get<T>(id)));
   }
 }

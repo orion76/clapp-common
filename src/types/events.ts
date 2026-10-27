@@ -8,10 +8,10 @@ import { ICommandResult } from "../plugin-types";
  * @template A Hook argument tuple
  * @template R Hook result type
  */
-export interface ILifecycle<A extends unknown = unknown, R = void> {
+export interface ILifecycle<A extends {} = {}, R = void> {
   id: string;
   type: string;
-  data?: A;
+  data: A;
   result?: R;
 }
 
@@ -21,7 +21,7 @@ export interface ILifecycle<A extends unknown = unknown, R = void> {
  * `void` keeps the current state unchanged.
  * @template L Lifecycle descriptor
  */
-export type THookListener<L extends ILifecycle<unknown, unknown>> = (args: L['data']) => Promise<L['result']>;
+export type THookListener<L extends ILifecycle> = (args: L['data']) => Promise<L['result']>;
 
 /**
  * Structural constraint requiring every property of a lifecycle map to be an
@@ -62,7 +62,7 @@ export interface IClappLifecycleMap {
 
 
 export interface IEventBus<M extends TLifecycleMapConstraint<M>> {
-  hook<K extends keyof M & string>(event: K, args: TCommandEventData<M[K]>): Promise<M[K]['result']>;
+  hook<K extends keyof M & string>(event: K, args: TCommandEventData<M[K]['data']>): Promise<M[K]['result']>;
   on<K extends keyof M & string>(event: K, listener: THookListener<M[K]>): () => void;
   once<K extends keyof M & string>(event: K, listener: THookListener<M[K]>): () => void;
   off<K extends keyof M & string>(event: K, listener: THookListener<M[K]>): void;

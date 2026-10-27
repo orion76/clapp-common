@@ -12,7 +12,7 @@ import type { IPluginContext, IPluginContextDefinition } from './types';
  * @template C Context value
  * @template A Context dependency values
  */
-export abstract class PluginContextBase<C> extends NodePluginBase<IPluginContextDefinition>
-  implements IPluginContext<C> {
-  abstract getContext(...args: unknown[]): Promise<C>;
+export abstract class PluginContextBase<C, D extends unknown[] = unknown[]> extends NodePluginBase<IPluginContextDefinition>
+  implements IPluginContext<C, D> {
+  abstract getContext(...args: D): Promise<C>;
 }

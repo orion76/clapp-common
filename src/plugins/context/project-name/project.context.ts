@@ -2,7 +2,6 @@ import { NodePlugin } from '@orion76/node-plugin';
 
 import { PLUGIN_CONTEXT_TYPE, PluginContextBase, type IPluginContext, type IPluginContextDefinition } from '@clapp/common';
 
-import { resolveProjectRoot } from '@clapp/utils';
 import { readProjectName } from './lib';
 
 /**
@@ -17,13 +16,13 @@ import { readProjectName } from './lib';
  * throws when the project is not found, and the launcher must stay usable outside
  * a project.
  */
-@NodePlugin<IPluginContextDefinition<string>>({
+@NodePlugin<IPluginContextDefinition>({
   type: PLUGIN_CONTEXT_TYPE,
   id: 'project',
   label: 'Context project name',
   dependencies: ['current-project-path'],
 })
-export class ProjectContext extends PluginContextBase<string, [string, string]> implements IPluginContext<string, [string, string]> {
+export class ProjectContext extends PluginContextBase<string, [string]> {
   async getContext(projectRoot: string): Promise<string> {
     if (projectRoot === null) {
       return '';

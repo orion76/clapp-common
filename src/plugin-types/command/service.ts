@@ -109,6 +109,6 @@ export class CommandService implements ICommandService {
     return { name: command.name(), args, opts };
   }
   private async hook<E extends TEventName>(event: E, pluginId: string, data: TEventArgs<E>) {
-    await this.eventBus.hook(event, { ...data, id: pluginId, type: PLUGIN_COMMAND_TYPE });
+    await this.eventBus.hook(event, { ...data, id: pluginId, type: PLUGIN_COMMAND_TYPE, data });
   }
 }

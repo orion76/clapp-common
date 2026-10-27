@@ -7,3 +7,4 @@ export * from './constants';
 export * from './base';
 export * from './types';
 export * from './di-tokens';
+export * from './utils';

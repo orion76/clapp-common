@@ -35,13 +35,14 @@
     "pack": "npm pack",
     "prepublishOnly": "npm run build",
     "test": "echo tests for clapp command!",
-    "test:jest": "jest",
+    "test:jest": "nx jest:test",
     "install-libs": "./scripts/install.sh",
-    "il": "npm run install-libs"
+    "il": "npm run install-libs",
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@clapp/utils": "^0.0.4",
-    "@orion76/plugin": "^0.3.0"
+    "@clapp/utils": "workspace:*",
+    "@orion76/plugin": "workspace:*"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
@@ -51,9 +52,10 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "tslib": "^2.4.0",
-    "@orion76/node-plugin": "^0.3.0",
+    "@opentf/cli-styles": "^0.15.0",
+    "@orion76/node-plugin": "workspace:*",
     "inversify": "^8.2.3",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "tslib": "^2.4.0"
   }
 }

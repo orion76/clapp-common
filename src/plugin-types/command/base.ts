@@ -12,7 +12,7 @@ export abstract class PluginCommandBase<A = {}, C extends Record<string, unknown
   implements IPluginCommand<A, C> {
 
   @inject(EVENT_BUS_TOKEN) protected _events!: IEventBus<IClappLifecycleMap>;
-  @inject(CONTEXT_SERVICE_TOKEN) protected _context!: IContextService<C>;
+  @inject(CONTEXT_SERVICE_TOKEN) protected _context!: IContextService;
 
   abstract action(args: A): Promise<ICommandResult>;
   async getArguments<O extends object = object>(args: string[], opts: O): Promise<A> {

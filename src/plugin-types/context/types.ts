@@ -4,11 +4,14 @@ export interface IPluginContextDefinition extends IPluginDefinition {
   dependencies?: string[];
 }
 
-export interface IPluginContext<C extends unknown = unknown> extends IPlugin {
+export interface IPluginContext<C extends unknown = unknown, D extends unknown[] = unknown[]> extends IPlugin {
   definition: IPluginContextDefinition;
-  getContext(...args: unknown[]): Promise<C>;
+  getContext(...args: D): Promise<C>;
 }
 
-export interface IContextService<M extends Record<string, unknown> = {}> {
-  get(token: keyof M): Promise<M[keyof M]>
+export interface IContextService {
+  get<T>(token: InjectableIdentifier<T>): Promise<T>
 }
+
+export type InjectableIdentifier<TInstance = unknown> = string;
+
