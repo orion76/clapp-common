@@ -34,16 +34,15 @@ export type TTokenValues<D extends readonly InjectableIdentifier<any>[]> = {
  * whose values are passed to `getContext(...)` in order.
  * @template D Token tuple of the context dependencies
  */
-export interface IPluginContextDefinition<D extends readonly InjectableIdentifier<any>[] = readonly InjectableIdentifier<any>[]>
-  extends IPluginDefinition {
-  dependencies?: D;
+export interface IPluginContextDefinition extends IPluginDefinition {
+
 }
 
 export interface IPluginContext<
   C extends unknown = unknown,
   D extends readonly InjectableIdentifier<any>[] = readonly InjectableIdentifier<any>[],
 > extends IPlugin {
-  definition: IPluginContextDefinition<D>;
+  definition: IPluginContextDefinition;
   getContext(...args: TTokenValues<D>): Promise<C>;
 }
 

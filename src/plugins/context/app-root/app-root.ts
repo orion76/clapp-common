@@ -4,15 +4,14 @@ import { PLUGIN_CONTEXT_TYPE, PluginContextBase, USER_HOME, type IPluginContextD
 import { getProjectRoot } from '@clapp/utils';
 import { getAppMeta } from '../app-meta';
 
-const definition = {
+const dependencies = [USER_HOME] as const;
+
+@NodePlugin({
   type: PLUGIN_CONTEXT_TYPE,
   id: 'app-root',
-  label: 'App root directory',
-  dependencies: [USER_HOME],
-} as const satisfies IPluginContextDefinition;
-
-@NodePlugin(definition)
-export class AppRootContext extends PluginContextBase<string, typeof definition.dependencies> {
+  label: 'App root directory'
+})
+export class AppRootContext extends PluginContextBase<string> {
   async getContext(userHome: string): Promise<string> {
     const { appPath } = getAppMeta();
     const appRoot = getProjectRoot(appPath, userHome);

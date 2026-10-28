@@ -35,25 +35,9 @@ export class AppContext implements IContextService {
     if (this._resolved.has(token)) {
       return this._resolved.get(token) as T;
     }
-
-    const definition = await this._pluginManager.getDefinition(token) as IPluginContextDefinition;
-    await this._resolveDependencies(definition);
-
     const value = await this._getContext(token);
     this._resolved.set(token, value);
     return value;
-  }
-
-  /**
-   * Creates every dependency context (if not already resolved) and caches its
-   * value. The actual values are later passed to `getContext(...)` in
-   * `dependencies` order.
-   * @param definition Definition of the context whose dependencies to resolve
-   */
-  private async _resolveDependencies({ dependencies }: IPluginContextDefinition): Promise<void> {
-    if (dependencies) {
-      await Promise.all(dependencies.map((id) => this.get(id)));
-    }
   }
 
   /**
@@ -64,9 +48,8 @@ export class AppContext implements IContextService {
    */
   private async _getContext<T>(token: InjectableIdentifier<T>): Promise<T> {
     const plugin = await this._pluginManager.getInstance(token) as IPluginContext<T>;
-    const dependencies = plugin.definition.dependencies;
-    const args = dependencies ? await this._getDependenciesValues(dependencies) : ([] as any[]);
-    return plugin.getContext(...args);
+
+    return plugin.getContext();
   }
 
   /**
