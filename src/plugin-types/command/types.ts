@@ -53,7 +53,7 @@ export interface ICommandResult<D = unknown> {
 }
 export interface ICommandService {
   createProgram(config: IAppConfig): Command;
-  createAppCommands(program: Command, context: IContextService<{}>): Promise<void>;
+  createAppCommands(program: Command, context: IContextService): Promise<void>;
 }
 
 export type TEventName = keyof IClappLifecycleMap;

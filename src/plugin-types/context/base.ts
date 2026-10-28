@@ -1,6 +1,6 @@
 import { NodePluginBase } from '@orion76/node-plugin';
 
-import type { IPluginContext, IPluginContextDefinition } from './types';
+import { InjectableIdentifier, IPluginContext, IPluginContextDefinition, TTokenValues } from './types';
 
 /**
  * Base class for context plugins. A context contributes a value (process, cwd,
@@ -10,9 +10,10 @@ import type { IPluginContext, IPluginContextDefinition } from './types';
  * discovers it, therefore it lives in `src/` (`src/context`), while the concrete
  * context plugins live in `packages/common/src/plugins/context/**`.
  * @template C Context value
- * @template A Context dependency values
+ * @template D Token tuple of the context dependencies; `getContext` argument
+ *   types and order are derived from `D` via `TTokenValues<D>`
  */
-export abstract class PluginContextBase<C, D extends unknown[] = unknown[]> extends NodePluginBase<IPluginContextDefinition>
+export abstract class PluginContextBase<C, D extends readonly InjectableIdentifier<any>[] = []> extends NodePluginBase<IPluginContextDefinition<D>>
   implements IPluginContext<C, D> {
-  abstract getContext(...args: D): Promise<C>;
+  abstract getContext(...args: TTokenValues<D>): Promise<C>;
 }

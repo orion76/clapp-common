@@ -3,8 +3,6 @@ import { inject, injectable } from 'inversify';
 import { CONTEXT_MANAGER_TOKEN } from './di-tokens';
 import { IContextService, InjectableIdentifier, IPluginContext, IPluginContextDefinition } from './types';
 
-type IndexKey<M> = keyof M extends string ? keyof M : never
-
 /**
  * Specialized DI container for application contexts: a core service (a facade
  * over the context plugin manager), not a plugin. The plugin loader never
@@ -13,33 +11,29 @@ type IndexKey<M> = keyof M extends string ? keyof M : never
  * The contexts it resolves are plugins of type `PLUGIN_CONTEXT_TYPE` living in
  * `packages/common/src/plugins/context/**`.
  *
- * `get(id)` resolves the context plugin, satisfies its `dependencies` (other
- * context ids) and passes the dependency **values** to `getContext(...)` in
+ * `get(token)` resolves the context plugin, satisfies its `dependencies` (other
+ * context tokens) and passes the dependency **values** to `getContext(...)` in
  * `dependencies` order. Non-context dependencies are injected through DI.
  *
  * Resolved context values are cached in `_resolved` (a Map of values, not
- * plugin instances): a repeated `get(id)` returns the cached value without
+ * plugin instances): a repeated `get(token)` returns the cached value without
  * recreating the context. Cache refresh is out of scope.
  */
 @injectable()
-export class AppContext<M extends Record<string, unknown> = {}, K extends IndexKey<M> = IndexKey<M>> implements IContextService {
+export class AppContext implements IContextService {
   private readonly _resolved = new Map<any, any>();
 
   @inject(CONTEXT_MANAGER_TOKEN) private readonly _pluginManager!: IPluginManager<IPluginContext>;
 
   /**
-   * Resolves the context plugin with the given id, satisfying its context
+   * Resolves the context plugin with the given token, satisfying its context
    * dependencies first, and returns its cached value.
    * @template T Resolved context value type
-   * @param id Context id
+   * @param token Branded context token
    */
   async get<T>(token: InjectableIdentifier<T>): Promise<T> {
     if (this._resolved.has(token)) {
-      const context = this._resolved.get(token);
-      if (!context) {
-        throw new Error(``);
-      }
-      return context;
+      return this._resolved.get(token) as T;
     }
 
     const definition = await this._pluginManager.getDefinition(token) as IPluginContextDefinition;
@@ -66,21 +60,21 @@ export class AppContext<M extends Record<string, unknown> = {}, K extends IndexK
    * Builds the context value by instantiating the context plugin and calling
    * `getContext(...)` with the values of its context dependencies in order.
    * @template T Resolved context value type
-   * @param id Context id
+   * @param token Branded context token
    */
-  private async _getContext<T>(id: InjectableIdentifier<T>): Promise<T> {
-    const plugin = await this._pluginManager.getInstance(id) as IPluginContext<T>;
-    const dependencies = plugin.definition.dependencies ;
-    const args = dependencies ? await this._getDependenciesValues<T>(dependencies) : [] as T[];
+  private async _getContext<T>(token: InjectableIdentifier<T>): Promise<T> {
+    const plugin = await this._pluginManager.getInstance(token) as IPluginContext<T>;
+    const dependencies = plugin.definition.dependencies;
+    const args = dependencies ? await this._getDependenciesValues(dependencies) : ([] as any[]);
     return plugin.getContext(...args);
   }
 
   /**
    * Resolves the values of the given context dependencies in order. Every
    * dependency is looked up in `_resolved` or created and cached there.
-   * @param dependencies Context dependency ids
+   * @param dependencies Context dependency tokens
    */
-  private async _getDependenciesValues<T>(dependencies: InjectableIdentifier<T>[]): Promise<T[]> {
-    return Promise.all(dependencies.map((id) => this.get<T>(id)));
+  private async _getDependenciesValues(dependencies: readonly InjectableIdentifier<any>[]): Promise<any[]> {
+    return Promise.all(dependencies.map((id) => this.get(id)));
   }
 }
