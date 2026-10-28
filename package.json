@@ -10,8 +10,9 @@
   ],
   "exports": {
     ".": {
-      "default": "./dist/clapp-common.js",
-      "types": "./dist/clapp-common.d.ts"
+      "development": "./src/public-api.ts",
+      "types": "./dist/clapp-common.d.ts",
+      "default": "./dist/clapp-common.js"
     }
   },
   "keywords": [

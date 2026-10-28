@@ -10,6 +10,9 @@ export * from './types';
 // Formatter data types - re-exported from plugin-types/formatter
 export * from './plugin-types';
 
+// Event bus: lifecycle contracts and the default implementation
+export * from './events';
+
 // Context tokens (re-exported explicitly alongside plugin-types/context)
 export * from './plugins/context/tokens';
 

@@ -9,7 +9,7 @@ import type { ICommandResult, IPluginCommandDefinitionData } from '../../src/plu
 
 import { EVENT_BUS_TOKEN } from '../../src/tokens.js';
 import type { IClappLifecycleMap, IEventBus } from '../../src/types/events.js';
-import { PLUGIN_COMMAND_TYPE } from '../../dist/clapp-common.js';
+import { PLUGIN_COMMAND_TYPE } from '../../src/plugin-types/command/constants.js';
 
 const definition: IPluginCommandDefinitionData = {
   type: PLUGIN_COMMAND_TYPE,
