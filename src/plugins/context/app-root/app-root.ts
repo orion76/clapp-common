@@ -1,10 +1,6 @@
 import { NodePlugin } from '@orion76/node-plugin';
-
-import { PLUGIN_CONTEXT_TYPE, PluginContextBase, USER_HOME, type IPluginContextDefinition } from '@clapp/common';
+import { CWD, PLUGIN_CONTEXT_TYPE, PluginContextBase, USER_HOME } from '@clapp/common';
 import { getProjectRoot } from '@clapp/utils';
-import { getAppMeta } from '../app-meta';
-
-const dependencies = [USER_HOME] as const;
 
 @NodePlugin({
   type: PLUGIN_CONTEXT_TYPE,
@@ -12,8 +8,10 @@ const dependencies = [USER_HOME] as const;
   label: 'App root directory'
 })
 export class AppRootContext extends PluginContextBase<string> {
-  async getContext(userHome: string): Promise<string> {
-    const { appPath } = getAppMeta();
+  async getContext(): Promise<string> {
+    const appPath = await this._context.get(CWD);
+    const userHome = await this._context.get(USER_HOME)
+
     const appRoot = getProjectRoot(appPath, userHome);
     if (!appRoot) {
       throw new Error(`error receiving the appRoot`);

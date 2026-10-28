@@ -10,23 +10,23 @@ import { IPlugin, IPluginDefinition } from '@orion76/plugin';
  * written by hand.
  * @template TInstance Value type associated with the token
  */
-export type InjectableIdentifier<TInstance = unknown> = string & { readonly __instance: TInstance };
+export type TContextIdentifier<TInstance = unknown> = string & { readonly __instance: TInstance };
 
 /**
  * Creates a branded token with the given runtime id string.
  * @template T Value type associated with the token
  * @param id Runtime id (a plain string at runtime — the brand is a phantom type)
  */
-export function contextToken<T>(id: string): InjectableIdentifier<T> {
-  return id as InjectableIdentifier<T>;
+export function contextToken<T>(id: string): TContextIdentifier<T> {
+  return id as TContextIdentifier<T>;
 }
 
 /**
  * Maps a tuple of tokens to a tuple of their value types.
  * @template D Token tuple
  */
-export type TTokenValues<D extends readonly InjectableIdentifier<any>[]> = {
-  [K in keyof D]: D[K] extends InjectableIdentifier<infer V> ? V : never;
+export type TTokenValues<D extends readonly TContextIdentifier<any>[]> = {
+  [K in keyof D]: D[K] extends TContextIdentifier<infer V> ? V : never;
 };
 
 /**
@@ -40,12 +40,12 @@ export interface IPluginContextDefinition extends IPluginDefinition {
 
 export interface IPluginContext<
   C extends unknown = unknown,
-  D extends readonly InjectableIdentifier<any>[] = readonly InjectableIdentifier<any>[],
+  D extends readonly TContextIdentifier<any>[] = readonly TContextIdentifier<any>[],
 > extends IPlugin {
   definition: IPluginContextDefinition;
   getContext(...args: TTokenValues<D>): Promise<C>;
 }
 
 export interface IContextService {
-  get<T>(token: InjectableIdentifier<T>): Promise<T>;
+  get<T>(token: TContextIdentifier<T>): Promise<T>;
 }

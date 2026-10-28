@@ -1,10 +1,8 @@
 import { NodePlugin } from '@orion76/node-plugin';
 
-import { PLUGIN_CONTEXT_TYPE, PluginContextBase, CWD, USER_HOME, type IPluginContextDefinition } from '@clapp/common';
+import { CWD, PLUGIN_CONTEXT_TYPE, PluginContextBase, USER_HOME } from '@clapp/common';
 import { getProjectRoot } from '@clapp/utils';
-import { getAppMeta } from '../app-meta';
 
-const dependencies = [CWD, USER_HOME] as const;
 
 @NodePlugin({
   type: PLUGIN_CONTEXT_TYPE,
@@ -12,7 +10,9 @@ const dependencies = [CWD, USER_HOME] as const;
   label: 'Current project path',
 })
 export class CurrentProjectContext extends PluginContextBase<string> {
-  async getContext(cwd: string, userHome: string): Promise<string> {
+  async getContext(): Promise<string> {
+    const cwd = await this._context.get(CWD);
+    const userHome = await this._context.get(USER_HOME);
     const currentProjectRoot = getProjectRoot(cwd, userHome);
     if (currentProjectRoot === undefined) {
       throw new Error(`Project root not found. cwd:${cwd}, userHome:${userHome}`);

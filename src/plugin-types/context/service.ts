@@ -1,7 +1,7 @@
 import type { IPluginManager } from '@orion76/node-plugin';
 import { inject, injectable } from 'inversify';
 import { CONTEXT_MANAGER_TOKEN } from './di-tokens';
-import { IContextService, InjectableIdentifier, IPluginContext, IPluginContextDefinition } from './types';
+import { IContextService, IPluginContext, TContextIdentifier } from './types';
 
 /**
  * Specialized DI container for application contexts: a core service (a facade
@@ -31,7 +31,7 @@ export class AppContext implements IContextService {
    * @template T Resolved context value type
    * @param token Branded context token
    */
-  async get<T>(token: InjectableIdentifier<T>): Promise<T> {
+  async get<T>(token: TContextIdentifier<T>): Promise<T> {
     if (this._resolved.has(token)) {
       return this._resolved.get(token) as T;
     }
@@ -46,7 +46,7 @@ export class AppContext implements IContextService {
    * @template T Resolved context value type
    * @param token Branded context token
    */
-  private async _getContext<T>(token: InjectableIdentifier<T>): Promise<T> {
+  private async _getContext<T>(token: TContextIdentifier<T>): Promise<T> {
     const plugin = await this._pluginManager.getInstance(token) as IPluginContext<T>;
 
     return plugin.getContext();
@@ -57,7 +57,7 @@ export class AppContext implements IContextService {
    * dependency is looked up in `_resolved` or created and cached there.
    * @param dependencies Context dependency tokens
    */
-  private async _getDependenciesValues(dependencies: readonly InjectableIdentifier<any>[]): Promise<any[]> {
+  private async _getDependenciesValues(dependencies: readonly TContextIdentifier<any>[]): Promise<any[]> {
     return Promise.all(dependencies.map((id) => this.get(id)));
   }
 }

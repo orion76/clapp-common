@@ -1,22 +1,6 @@
 import { NodePlugin } from '@orion76/node-plugin';
-
-import { PLUGIN_CONTEXT_TYPE, PluginContextBase, CURRENT_PROJECT_PATH, type IPluginContextDefinition, APP_ROOT } from '@clapp/common';
-
+import { APP_ROOT, PLUGIN_CONTEXT_TYPE, PluginContextBase, type IPluginContextDefinition } from '@clapp/common';
 import { readProjectName } from './lib';
-
-/**
- * Context plugin that contributes the name of the context project — the `name` of
- * the `package.json` in the project root. It is the identity a launcher needs to
- * tell in which project it runs (the plugins of the project come from
- * `plugins/**` of that same root).
- *
- * The plugin is based on the `app-root` context rule but never fails: no project
- * or no `name` yields an empty string. It depends on `cwd`/`user-home` (the
- * dependencies of `app-root`) instead of on `app-root` itself, because `app-root`
- * throws when the project is not found, and the launcher must stay usable outside
- * a project.
- */
-const dependencies = [CURRENT_PROJECT_PATH, APP_ROOT] as const;
 
 @NodePlugin({
   type: PLUGIN_CONTEXT_TYPE,
@@ -24,7 +8,9 @@ const dependencies = [CURRENT_PROJECT_PATH, APP_ROOT] as const;
   label: 'Context project name',
 } as const satisfies IPluginContextDefinition)
 export class ProjectContext extends PluginContextBase<string> {
-  async getContext(projectRoot: string): Promise<string> {
+  async getContext(): Promise<string> {
+    const projectRoot = await this._context.get(APP_ROOT)
+
     if (projectRoot === null) {
       return '';
     }

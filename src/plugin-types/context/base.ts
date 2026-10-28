@@ -1,6 +1,8 @@
 import { NodePluginBase } from '@orion76/node-plugin';
 
-import { IPluginContext, IPluginContextDefinition, TTokenValues } from './types';
+import { CONTEXT_SERVICE_TOKEN } from '@clapp/common';
+import { inject } from 'inversify';
+import { IContextService, IPluginContext, IPluginContextDefinition } from './types';
 
 /**
  * Base class for context plugins. A context contributes a value (process, cwd,
@@ -15,5 +17,7 @@ import { IPluginContext, IPluginContextDefinition, TTokenValues } from './types'
  */
 export abstract class PluginContextBase<C> extends NodePluginBase<IPluginContextDefinition>
   implements IPluginContext<C> {
-  abstract getContext(...args: TTokenValues<D>): Promise<C>;
+  @inject(CONTEXT_SERVICE_TOKEN) protected readonly _context!:IContextService;
+
+  abstract getContext(): Promise<C>;
 }
