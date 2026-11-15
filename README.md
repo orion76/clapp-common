@@ -2,6 +2,8 @@
 
 > ⚠️ **В разработке.** Пакет ещё не готов к релизу: релиз ожидается в ближайшее время, API может меняться. Использовать в продакшне пока нельзя.
 
+**English** | [Русский](./docs/ru/README.md)
+
 # @clapp/common
 
 Shared contracts of the `clapp` CLI framework: the types, base classes, plugin-type constants and DI tokens the other packages of the [`orion76/clapp`](https://github.com/orion76/clapp) monorepo are built on. The package holds no business logic of its own — it is the vocabulary that `@clapp/core`, the plugins and the hosts speak.
@@ -83,10 +85,6 @@ The event bus is injected into every command plugin as `this._events`. A listene
 | [`@clapp/ai-workflow-plugins`](https://www.npmjs.com/package/@clapp/ai-workflow-plugins) | [`orion76/clapp-ai-workflow-plugins`](https://github.com/orion76/clapp-ai-workflow-plugins) |
 | [`@clapp/ai-workflow-cli`](https://www.npmjs.com/package/@clapp/ai-workflow-cli) | [`orion76/clapp-ai-workflow-cli`](https://github.com/orion76/clapp-ai-workflow-cli)       |
 | [`@clapp/ai-workflow-mcp`](https://www.npmjs.com/package/@clapp/ai-workflow-mcp) | [`orion76/clapp-ai-workflow-mcp`](https://github.com/orion76/clapp-ai-workflow-mcp)       |
-
-## Русский
-
-`@clapp/common` — общий словарь фреймворка: контракты и базовые классы плагинов команд, контекстов и форматтеров, данные форматирования (`ITableData`, `IOrderedListData`, `IKeyValueData`, `UFormatterKind`), карта событий жизненного цикла и DI-токены. Собственной прикладной логики в пакете нет: им пользуются `@clapp/core`, библиотеки плагинов и хосты CLI и MCP. Пакет ещё не опубликован и находится в активной разработке. Релиз ожидается в ближайшее время, но API может меняться без предупреждения. Использовать пакет в продакшне пока нельзя.
 
 ## License
 
