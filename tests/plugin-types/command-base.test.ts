@@ -10,6 +10,8 @@ import type { ICommandResult, IPluginCommandDefinitionData } from '../../src/plu
 import { EVENT_BUS_TOKEN } from '../../src/tokens.js';
 import type { IClappLifecycleMap, IEventBus } from '../../src/types/events.js';
 import { PLUGIN_COMMAND_TYPE } from '../../src/plugin-types/command/constants.js';
+import { CONTEXT_SERVICE_TOKEN } from '../../src/plugin-types/context/di-tokens.js';
+import type { IContextService } from '../../src/plugin-types/context/types.js';
 
 const definition: IPluginCommandDefinitionData = {
   type: PLUGIN_COMMAND_TYPE,
@@ -29,6 +31,14 @@ const EMPTY_BUS: IEventBus<IClappLifecycleMap> = {
   off: () => { },
 };
 
+// PluginCommandBase also property-injects @inject(CONTEXT_SERVICE_TOKEN) _context;
+// bind a stub so the container can resolve the class without a runtime.
+const contextServiceMock: IContextService = {
+  get: async () => {
+    throw new Error('IContextService.get is not used in this test');
+  },
+};
+
 @NodePlugin(definition)
 @injectable()
 class ReadFileCommand extends PluginCommandBase<{ path: string; encoding: string }, {}> {
@@ -41,6 +51,7 @@ function createCommand(): ReadFileCommand {
   const container = new Container();
   container.bind(PLUGIN_DEFINITION).toConstantValue(definition);
   container.bind(EVENT_BUS_TOKEN).toConstantValue(EMPTY_BUS);
+  container.bind(CONTEXT_SERVICE_TOKEN).toConstantValue(contextServiceMock);
   container.bind(ReadFileCommand).toSelf();
   return container.get(ReadFileCommand);
 }

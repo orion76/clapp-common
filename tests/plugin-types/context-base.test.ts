@@ -6,7 +6,8 @@ import { Container, injectable } from 'inversify';
 
 import { PluginContextBase } from '../../src/plugin-types/context/base.js';
 import { PLUGIN_CONTEXT_TYPE } from '../../src/plugin-types/context/constants.js';
-import type { IPluginContextDefinition } from '../../src/plugin-types/context/types.js';
+import { CONTEXT_SERVICE_TOKEN } from '../../src/plugin-types/context/di-tokens.js';
+import type { IContextService, IPluginContextDefinition } from '../../src/plugin-types/context/types.js';
 
 const definition: IPluginContextDefinition = {
   type: PLUGIN_CONTEXT_TYPE,
@@ -18,17 +19,26 @@ interface IArguments {
   cwd: string;
 }
 
+// PluginContextBase property-injects @inject(CONTEXT_SERVICE_TOKEN) _context; the
+// test binds a stub service so the container can resolve the class without a runtime.
+const contextServiceMock: IContextService = {
+  get: async () => {
+    throw new Error('IContextService.get is not used in this test');
+  },
+};
+
 @NodePlugin(definition)
 @injectable()
 class TestContext extends PluginContextBase<IArguments> {
-  async getContext(dir: string): Promise<IArguments> {
-    return { cwd: dir };
+  async getContext(): Promise<IArguments> {
+    return { cwd: '/work' };
   }
 }
 
 function createContext(): TestContext {
   const container = new Container();
   container.bind(PLUGIN_DEFINITION).toConstantValue(definition);
+  container.bind(CONTEXT_SERVICE_TOKEN).toConstantValue(contextServiceMock);
   container.bind(TestContext).toSelf();
   return container.get(TestContext);
 }
@@ -44,6 +54,6 @@ describe('PluginContextBase', () => {
 
   it('runs the concrete getContext implementation', async () => {
     const context = createContext();
-    await expect(context.getContext('/work')).resolves.toEqual({ cwd: '/work' });
+    await expect(context.getContext()).resolves.toEqual({ cwd: '/work' });
   });
 });
