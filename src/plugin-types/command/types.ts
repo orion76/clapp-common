@@ -1,7 +1,6 @@
 import { IPlugin, IPluginDefinition, IType } from '@orion76/plugin';
 import { ICommandArgument, ICommandOption } from '../../types/commander';
 import { UCommandDefinitionKind } from '../types';
-import { IContextService } from '../context';
 import { Command } from 'commander';
 import { IAppConfig, IClappLifecycleMap, ILifecycle } from '../../types';
 
@@ -66,10 +65,9 @@ export interface ICommandService {
   /**
    * Registers the commands of the discovered command plugins in the program.
    * @param program Commander program the commands are registered in
-   * @param context Application contexts; accepted for the contract, not passed to commands yet
    * @param renderResult Renders the result of a command that declares a formatter
    */
-  createAppCommands(program: Command, context: IContextService, renderResult: TCommandResultRenderer): Promise<void>;
+  createAppCommands(program: Command, renderResult: TCommandResultRenderer): Promise<void>;
 }
 
 export type TEventName = keyof IClappLifecycleMap;

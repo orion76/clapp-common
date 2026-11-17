@@ -3,7 +3,6 @@ import { inject } from 'inversify';
 
 import { EVENT_BUS_TOKEN } from '../../tokens';
 import { IClappLifecycleMap, IEventBus } from '../../types/events';
-import { CONTEXT_SERVICE_TOKEN, IContextService } from '../context';
 import { ICommandResult, IPluginCommand, IPluginCommandDefinition } from './types';
 
 
@@ -12,7 +11,6 @@ export abstract class PluginCommandBase<A = {}, C extends Record<string, unknown
   implements IPluginCommand<A, C> {
 
   @inject(EVENT_BUS_TOKEN) protected _events!: IEventBus<IClappLifecycleMap>;
-  @inject(CONTEXT_SERVICE_TOKEN) protected _context!: IContextService;
 
   abstract action(args: A): Promise<ICommandResult>;
   async getArguments<O extends object = object>(args: string[], opts: O): Promise<A> {

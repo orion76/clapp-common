@@ -6,7 +6,6 @@ import { EVENT_BUS_TOKEN } from '../../tokens';
 import { IAppConfig, IClappLifecycleMap, ICommandExecArguments, ICommandNode, IEventBus } from '../../types';
 
 
-import { IContextService } from '../context';
 import { PLUGIN_COMMAND_TYPE } from './constants';
 import { COMMAND_MANAGER_TOKEN } from './di-tokens';
 import { ICommandResult, ICommandService, IPluginCommand, IPluginCommandDefinition, TCommandResultRenderer, TEventArgs, TEventName } from './types';
@@ -24,14 +23,10 @@ export class CommandService implements ICommandService {
 
   /**
    * Registers the commands of the discovered command plugins in the program.
-   *
-   * `context` is accepted to satisfy `ICommandService`; it is not passed to the
-   * commands yet, so threading the contexts into a command action stays separate work.
    * @param program Commander program the commands are registered in
-   * @param context Application contexts of the program
    * @param renderResult Writes the result of a command that declares a formatter
    */
-  async createAppCommands(program: Command, context: IContextService, renderResult: TCommandResultRenderer): Promise<void> {
+  async createAppCommands(program: Command, renderResult: TCommandResultRenderer): Promise<void> {
     const definitions = await this.pluginManager.getDefinitions();
     const nodes = buildHierarchy(definitions);
 
