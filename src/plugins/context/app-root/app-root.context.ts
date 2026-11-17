@@ -7,7 +7,6 @@ import {
   contextToken,
   PLUGIN_CONTEXT_TYPE,
   PluginContextBase,
-  type IPluginContextDefinition,
   type TContextIdentifier,
 } from '../../../plugin-types/context';
 import { CWD } from '../cwd/cwd.context';
@@ -20,7 +19,7 @@ export const APP_ROOT: TContextIdentifier<string> = contextToken<string>('app-ro
   type: PLUGIN_CONTEXT_TYPE,
   id: APP_ROOT,
   label: 'App root directory',
-} as const satisfies IPluginContextDefinition<string>)
+})
 @injectable()
 export class AppRootContext extends PluginContextBase<string> {
   @inject(CWD) private readonly cwd!: string;

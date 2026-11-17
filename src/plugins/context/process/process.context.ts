@@ -7,7 +7,6 @@ import {
   contextToken,
   PLUGIN_CONTEXT_TYPE,
   PluginContextBase,
-  type IPluginContextDefinition,
   type TContextIdentifier,
 } from '../../../plugin-types/context';
 
@@ -18,7 +17,7 @@ export const PROCESS: TContextIdentifier<NodeJS.Process> = contextToken<NodeJS.P
   type: PLUGIN_CONTEXT_TYPE,
   id: PROCESS,
   label: 'App process',
-} as const satisfies IPluginContextDefinition<NodeJS.Process>)
+})
 @injectable()
 export class ProcessContext extends PluginContextBase<NodeJS.Process> {
   async getContext(): Promise<NodeJS.Process> {

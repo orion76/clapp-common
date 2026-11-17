@@ -7,7 +7,6 @@ import {
   contextToken,
   PLUGIN_CONTEXT_TYPE,
   PluginContextBase,
-  type IPluginContextDefinition,
   type TContextIdentifier,
 } from '../../../plugin-types/context';
 import { CWD } from '../cwd/cwd.context';
@@ -20,7 +19,7 @@ export const CURRENT_PROJECT_PATH: TContextIdentifier<string> = contextToken<str
   type: PLUGIN_CONTEXT_TYPE,
   id: CURRENT_PROJECT_PATH,
   label: 'Current project path',
-} as const satisfies IPluginContextDefinition<string>)
+})
 @injectable()
 export class CurrentProjectContext extends PluginContextBase<string> {
   @inject(CWD) private readonly cwd!: string;

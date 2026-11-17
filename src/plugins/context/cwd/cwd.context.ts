@@ -5,7 +5,6 @@ import {
   contextToken,
   PLUGIN_CONTEXT_TYPE,
   PluginContextBase,
-  type IPluginContextDefinition,
   type TContextIdentifier,
 } from '../../../plugin-types/context';
 import { getAppMeta } from '../app-meta';
@@ -17,7 +16,7 @@ export const CWD: TContextIdentifier<string> = contextToken<string>('cwd');
   type: PLUGIN_CONTEXT_TYPE,
   id: CWD,
   label: 'App CWD',
-} as const satisfies IPluginContextDefinition<string>)
+})
 @injectable()
 export class CwdContext extends PluginContextBase<string> {
   async getContext(): Promise<string> {

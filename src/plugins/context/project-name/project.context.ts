@@ -5,7 +5,6 @@ import {
   contextToken,
   PLUGIN_CONTEXT_TYPE,
   PluginContextBase,
-  type IPluginContextDefinition,
   type TContextIdentifier,
 } from '../../../plugin-types/context';
 import { APP_ROOT } from '../app-root/app-root.context';
@@ -18,7 +17,7 @@ export const PROJECT_PATH: TContextIdentifier<string> = contextToken<string>('pr
   type: PLUGIN_CONTEXT_TYPE,
   id: PROJECT_PATH,
   label: 'Context project name',
-} as const satisfies IPluginContextDefinition<string>)
+})
 @injectable()
 export class ProjectContext extends PluginContextBase<string> {
   @inject(APP_ROOT) private readonly appRoot!: string;
