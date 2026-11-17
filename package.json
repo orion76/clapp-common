@@ -43,7 +43,7 @@
   },
   "peerDependencies": {
     "@clapp/utils": "workspace:*",
-    "@orion76/plugin": "workspace:*"
+    "@orion76/plugin": "link:../../../@orion76/projects/plugin"
   },
   "devDependencies": {
     "@jest/globals": "^30.3.0",
@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@opentf/cli-styles": "^0.15.0",
-    "@orion76/node-plugin": "workspace:*",
+    "@orion76/node-plugin": "link:../../../@orion76/projects/node-plugin",
     "inversify": "^8.2.3",
     "reflect-metadata": "^0.2.2",
     "tslib": "^2.4.0"

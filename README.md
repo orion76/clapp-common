@@ -6,7 +6,9 @@
 
 # @clapp/common
 
-Shared contracts of the `clapp` CLI framework: the types, base classes, plugin-type constants and DI tokens the other packages of the [`orion76/clapp`](https://github.com/orion76/clapp) monorepo are built on. The package holds no business logic of its own — it is the vocabulary that `@clapp/core`, the plugins and the hosts speak.
+The package is published from its own repository, [`orion76/clapp-common`](https://github.com/orion76/clapp-common); it is developed together with the `clapp` host and its dev sample app ([`orion76/clapp`](https://github.com/orion76/clapp)).
+
+Shared contracts of the `clapp` CLI framework: the types, base classes, plugin-type constants and DI tokens the other `@clapp/*` packages are built on. The package holds no business logic of its own — it is the vocabulary that `@clapp/core`, the plugins and the hosts speak.
 
 ## Features
 
@@ -21,7 +23,7 @@ Shared contracts of the `clapp` CLI framework: the types, base classes, plugin-t
 
 ## Installation
 
-The package is not published to npm yet, so `npm install @clapp/common` does not resolve until the first release. Until then it is consumed as a workspace package of the monorepo:
+The package is not published to npm yet, so `npm install @clapp/common` does not resolve until the first release. Until then it is consumed as a workspace package of the `clapp` host workspace ([`orion76/clapp`](https://github.com/orion76/clapp)):
 
 ```bash
 npm install @clapp/common

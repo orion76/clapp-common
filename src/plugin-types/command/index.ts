@@ -8,3 +8,4 @@ export * from './base';
 export * from './types';
 export * from './di-tokens';
 export * from './utils';
+export * from './service';

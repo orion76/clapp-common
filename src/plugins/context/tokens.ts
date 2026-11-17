@@ -1,9 +1,10 @@
 import { contextToken, type TContextIdentifier } from '../../plugin-types/context/types';
 
 /**
- * Context tokens — branded string identifiers of the context plugins living in
- * `packages/common/src/plugins/context/**`. Their runtime value is the token id
- * (a plain string); the brand carries the value type for typed `getContext` args.
+ * Context tokens — symbols addressing the values of the context plugins living in
+ * `packages/common/src/plugins/context/**`. The runtime value of a token is a
+ * unique symbol whose description repeats the plugin `id`; the id itself stays in
+ * the plugin definition, which is the only place where a context has a string name.
  */
 
 /** Token of the `app-root` context. Value: absolute path of the app root. */
@@ -23,3 +24,16 @@ export const PROJECT_PATH: TContextIdentifier<string> = contextToken<string>('pr
 
 /** Token of the `user-home` context. Value: user home directory. */
 export const USER_HOME: TContextIdentifier<string> = contextToken<string>('user-home');
+
+/**
+ * All built-in context tokens: the set the host binds into the container as lazy
+ * accessors, so a plugin reaches a context value through `@inject(TOKEN)`.
+ */
+export const CONTEXT_TOKENS: readonly TContextIdentifier<unknown>[] = [
+  APP_ROOT,
+  CURRENT_PROJECT_PATH,
+  CWD,
+  PROCESS,
+  PROJECT_PATH,
+  USER_HOME,
+];

@@ -1,7 +1,7 @@
 import { NodePluginBase } from '@orion76/node-plugin';
-
-import { CONTEXT_SERVICE_TOKEN } from '@clapp/common';
 import { inject } from 'inversify';
+
+import { CONTEXT_SERVICE_TOKEN } from './di-tokens';
 import { IContextService, IPluginContext, IPluginContextDefinition } from './types';
 
 /**
@@ -11,9 +11,11 @@ import { IContextService, IPluginContext, IPluginContextDefinition } from './typ
  * The class itself is a core base class, not a plugin: the plugin loader never
  * discovers it, therefore it lives in `src/` (`src/context`), while the concrete
  * context plugins live in `packages/common/src/plugins/context/**`.
+ *
+ * The model is pull: `getContext()` takes no arguments, the context reads the
+ * values it needs from the injected {@link IContextService} itself —
+ * `this._context.get(TOKEN)`.
  * @template C Context value
- * @template D Token tuple of the context dependencies; `getContext` argument
- *   types and order are derived from `D` via `TTokenValues<D>`
  */
 export abstract class PluginContextBase<C> extends NodePluginBase<IPluginContextDefinition>
   implements IPluginContext<C> {

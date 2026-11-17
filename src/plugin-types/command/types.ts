@@ -51,9 +51,25 @@ export interface ICommandResult<D = unknown> {
   /** Data for the formatter declared by the command definition. */
   data?: D;
 }
+/**
+ * Renders the result of a command that declares a formatter.
+ *
+ * Implemented by the engine that owns the formatter manager and passed to
+ * `ICommandService.createAppCommands`, so `@clapp/common` keeps no core dependency.
+ * @param definition Definition of the command whose action produced the result
+ * @param result Result returned by the command action
+ */
+export type TCommandResultRenderer = (definition: IPluginCommandDefinition, result: ICommandResult) => Promise<void>;
+
 export interface ICommandService {
   createProgram(config: IAppConfig): Command;
-  createAppCommands(program: Command, context: IContextService): Promise<void>;
+  /**
+   * Registers the commands of the discovered command plugins in the program.
+   * @param program Commander program the commands are registered in
+   * @param context Application contexts; accepted for the contract, not passed to commands yet
+   * @param renderResult Renders the result of a command that declares a formatter
+   */
+  createAppCommands(program: Command, context: IContextService, renderResult: TCommandResultRenderer): Promise<void>;
 }
 
 export type TEventName = keyof IClappLifecycleMap;
