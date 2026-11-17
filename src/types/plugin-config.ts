@@ -42,6 +42,10 @@
  *
  * - `appRoot` — the root of the launcher application, the package that holds
  *   `clapp.config.yml` (never `process.cwd()`);
+ * - `path` — the directory named by {@link IPluginSourcePathConfig.path}, resolved
+ *   from the application root. No `node_modules` resolution happens, so the plugins
+ *   of a monorepo checkout are loaded from its sources, and an absent directory is
+ *   not an error: the source is simply empty;
  * - `library` — the directory of the npm package named by
  *   {@link IPluginSourceConfig.library}. The package is resolved from the
  *   application root through the Node.js resolution algorithm, so npm-workspaces
@@ -51,7 +55,7 @@
  *   the project are an auxiliary tool of the developer, not a part of the
  *   launcher, so they live in `plugins/**` in the project root.
  */
-export type UPluginSourceType = 'appRoot' | 'library' | 'project';
+export type UPluginSourceType = 'appRoot' | 'path' | 'library' | 'project';
 
 /**
  * Single source of plugin modules of one plugin type.
@@ -66,7 +70,18 @@ export interface IPluginSourceLibraryConfig extends IPluginSourceConfig {
   library: string;
 }
 
-export type UPluginSourceConfig = IPluginSourceConfig | IPluginSourceLibraryConfig;
+/**
+ * Source anchored at a directory of the file system, used in development to load
+ * the plugins of a monorepo package from its sources instead of its installed copy.
+ * `path` is resolved relative to the directory of the config file (the application
+ * root), an absolute path is taken as-is.
+ */
+export interface IPluginSourcePathConfig extends IPluginSourceConfig {
+  type: 'path';
+  path: string;
+}
+
+export type UPluginSourceConfig = IPluginSourceConfig | IPluginSourceLibraryConfig | IPluginSourcePathConfig;
 
 /**
  * Discovery configuration of one plugin type: the sources its definitions come
