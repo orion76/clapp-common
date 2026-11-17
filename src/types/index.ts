@@ -1,3 +1,4 @@
+export * from './argument';
 export * from './common';
 export * from './commander';
 export * from './events';

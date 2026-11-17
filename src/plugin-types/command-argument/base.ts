@@ -2,19 +2,21 @@ import { NodePluginBase } from '@orion76/node-plugin';
 import { inject } from 'inversify';
 
 import { EVENT_BUS_TOKEN } from '../../tokens';
-import { IClappLifecycleMap, IEventBus } from '../../types/events';
-import { IPluginCommandArgumentDefinition, ICommandArgumentResult, IPluginCommandArgument } from './types';
-
+import type { IClappLifecycleMap, IEventBus } from '../../types/events';
+import type { IPluginCommandDefinition } from '../command/types';
+import type { ICommandArgumentState, IPluginCommandArgument, IPluginCommandArgumentDefinition } from './types';
 
 /**
- * Command plugin instance
- * Handles command registration and execution using the plugin system
- * @template A Command arguments
- * @template E Plugin-specific lifecycle map
+ * Base class of a command argument plugin — one step of the argument chain.
+ *
+ * A step rewrites the command definition before the host registers the command and
+ * fills the arguments it can provide once the host has parsed the values. The
+ * `definition` property is delivered by property injection from `NodePluginBase`:
+ * a concrete step declares neither a constructor nor `@inject(PLUGIN_DEFINITION)`.
  */
-export abstract class PluginCommandArgumentBase<A = {}, C = {}>
-  extends NodePluginBase<IPluginCommandArgumentDefinition<A, C>>
-  implements IPluginCommandArgument<A, C>
+export abstract class PluginCommandArgumentBase
+  extends NodePluginBase<IPluginCommandArgumentDefinition>
+  implements IPluginCommandArgument
 {
   /**
    * Shared asynchronous event bus, delivered by the DI container through
@@ -25,12 +27,7 @@ export abstract class PluginCommandArgumentBase<A = {}, C = {}>
   @inject(EVENT_BUS_TOKEN)
   protected _events!: IEventBus<IClappLifecycleMap>;
 
-  /**
-   * Action handler invoked with the parsed operands and options, plus an array
-   * of context values required by the command.
-   * @param args Positional and named operands declared by the command definition
-   * @param contexts Array of context values corresponding to the command's `contexts` declaration
-   */
-  abstract action(args: A, contexts: C): Promise<ICommandArgumentResult>;
+  abstract transformDefinition(definition: IPluginCommandDefinition): IPluginCommandDefinition;
 
+  abstract fill(state: ICommandArgumentState): Promise<Record<string, unknown>>;
 }

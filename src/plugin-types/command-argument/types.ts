@@ -1,49 +1,67 @@
-import { IPlugin, IPluginDefinition, IType } from '@orion76/plugin';
+import type { IPlugin, IPluginDefinition, IType } from '@orion76/plugin';
+
+import type { IPluginCommandDefinition } from '../command/types';
 
 /**
- * Flat command definition. Hierarchy is expressed with the optional `parent`
- * field — the id of the definition this command belongs to.
+ * Definition of one step of the command argument chain.
  *
- * `id` and `command` name different things. `id` is the identifier of the plugin
- * definition and is the key the engine addresses the plugin by; `command` is the name
- * the command has on the surface whose engine registers it. The definition loader keys
- * definitions by `id` alone — ignoring `parent` — and rejects a duplicate with
- * `Plugin definition already exists`, so a command set keeps its `id`s flat and unique:
- * for a command of a set the id is the full path from the root to the subcommand joined
- * with `_` (`board`, `board_list`, `board_next`, `skill`, `skill_add`, `skill_list`).
+ * `order` is the position of the step: the chain runs in ascending order and ties
+ * are broken by `id`, so the result never depends on the order of the discovery
+ * glob. A definition without `order` runs at position `0`.
+ * @template P Plugin class the definition is attached to
  */
-export interface IPluginCommandArgumentDefinition<A = {}, C = {}> extends IPluginDefinition {
-  pluginClass: IType<IPluginCommandArgument<A>>;
-}
-/**
- * Authoring-time command definition. `pluginClass` is attached by the
- * `@NodePlugin` decorator, so it is omitted from the object the author writes.
- */
-export type IPluginCommandArgumentDefinitionData<A = {}, C = {}> = Omit<IPluginCommandArgumentDefinition<A, C>, 'pluginClass'>;
-
-export interface IPluginCommandArgument<A = {}, C = {}> extends IPlugin {
-  definition: IPluginCommandArgumentDefinition<A, C>;
+export interface IPluginCommandArgumentDefinition<P extends IPluginCommandArgument = IPluginCommandArgument>
+  extends IPluginDefinition {
+  /** Chain position: ascending, `0` by default; ties are resolved by `id`. */
+  order?: number;
   /**
-   * Action handler invoked with the parsed operands and options, plus an array
-   * of context values required by the command.
-   * @param args Positional and named operands declared by the command definition
-   * @param contexts Array of context values corresponding to the command's `contexts` declaration
+   * Names of the arguments this step can provide, declared as a table rather than derived
+   * from the step: the check runs at startup on the discovered definitions, before any
+   * instance or context is resolved.
    */
-  action: (args: A, contexts: C) => Promise<ICommandArgumentResult>;
+  argumentNames: readonly string[];
+  pluginClass: IType<P>;
 }
 
 /**
- * Result of a command action.
- *
- * A command that declares a `formatter` returns the data to render in `data`;
- * the core passes it to the formatter plugin and prints the returned string.
- * Commands without a formatter keep printing their own output and leave `data`
- * unset.
- * @template D Type of the data handed to the formatter; `unknown` by default
+ * Authoring-time definition of a chain step: `pluginClass` is attached by the
+ * `@NodePlugin` decorator, so the author does not write it.
+ * @template P Plugin class the definition is attached to
  */
-export interface ICommandArgumentResult<D = unknown> {
-  success: boolean;
-  error?: string[];
-  /** Data for the formatter declared by the command definition. */
-  data?: D;
+export type IPluginCommandArgumentDefinitionData<P extends IPluginCommandArgument = IPluginCommandArgument> = Omit<
+  IPluginCommandArgumentDefinition<P>,
+  'pluginClass'
+>;
+
+/**
+ * What a chain step operates on: the command definition the host is about to
+ * register and the values it has already parsed.
+ */
+export interface ICommandArgumentState {
+  definition: IPluginCommandDefinition;
+  /** Values already parsed by the host: positional arguments by name, options by name. */
+  values: Record<string, unknown>;
+}
+
+/**
+ * One step of the command argument chain. The host asks every step of the chain
+ * for the arguments it can provide: the definition is rewritten before the command
+ * is registered, the values are filled once the host has parsed them.
+ */
+export interface IPluginCommandArgument extends IPlugin {
+  definition: IPluginCommandArgumentDefinition;
+  /**
+   * Rewrites the command definition before the host registers it. The step is static:
+   * it resolves neither contexts nor DI, otherwise the contexts of every command would
+   * be resolved at startup.
+   * @param definition Definition the host is about to register
+   * @returns Definition the host registers instead; the cached definition is not mutated
+   */
+  transformDefinition(definition: IPluginCommandDefinition): IPluginCommandDefinition;
+  /**
+   * Fills the arguments this step knows how to provide, leaving the rest untouched.
+   * @param state Definition of the command plus the values the host has already parsed
+   * @returns Only the values filled by this step, applied as a patch over `state.values`
+   */
+  fill(state: ICommandArgumentState): Promise<Record<string, unknown>>;
 }
