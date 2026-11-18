@@ -34,10 +34,14 @@ function createFormatter(): TestFormatter {
 describe('PluginFormatterBase', () => {
   it('injects a definition and exposes id/label/type', () => {
     const formatter = createFormatter();
-    expect(formatter.definition).toMatchObject({ id: 'test-formatter', label: 'Test Formatter', type: 'PLUGIN_FORMATTER' });
+    expect(formatter.definition).toMatchObject({
+      id: 'test-formatter',
+      label: 'Test Formatter',
+      type: PLUGIN_FORMATTER_TYPE,
+    });
     expect(formatter.id).toBe('test-formatter');
     expect(formatter.label).toBe('Test Formatter');
-    expect(formatter.type).toBe('PLUGIN_FORMATTER');
+    expect(formatter.type).toBe(PLUGIN_FORMATTER_TYPE);
   });
 
   it('runs the concrete format implementation', async () => {

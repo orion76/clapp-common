@@ -41,10 +41,14 @@ function createContext(): TestContext {
 describe('PluginContextBase', () => {
   it('injects a definition and exposes id/label/type', () => {
     const context = createContext();
-    expect(context.definition).toMatchObject({ id: 'test-context', label: 'Test Context', type: 'PLUGIN_CONTEXT' });
+    expect(context.definition).toMatchObject({
+      id: 'test-context',
+      label: 'Test Context',
+      type: PLUGIN_CONTEXT_TYPE,
+    });
     expect(context.id).toBe('test-context');
     expect(context.label).toBe('Test Context');
-    expect(context.type).toBe('PLUGIN_CONTEXT');
+    expect(context.type).toBe(PLUGIN_CONTEXT_TYPE);
   });
 
   it('runs the concrete getContext implementation', async () => {

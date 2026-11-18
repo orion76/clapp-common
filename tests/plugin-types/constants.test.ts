@@ -5,19 +5,19 @@ import { COMMAND_KIND_GROUP, COMMAND_KIND_PROMPT, COMMAND_KIND_RESOURCE, COMMAND
 
 describe('plugin type constants', () => {
   it('defines the command plugin type', () => {
-    expect(PLUGIN_COMMAND_TYPE).toBe('PLUGIN_COMMAND');
+    expect(PLUGIN_COMMAND_TYPE).toBe('command');
   });
 
   it('defines the context plugin type', () => {
-    expect(PLUGIN_CONTEXT_TYPE).toBe('PLUGIN_CONTEXT');
+    expect(PLUGIN_CONTEXT_TYPE).toBe('context');
   });
 
   it('defines the argument plugin type', () => {
-    expect(PLUGIN_COMMAND_ARGUMENT_TYPE).toBe('PLUGIN_COMMAND_ARGUMENT');
+    expect(PLUGIN_COMMAND_ARGUMENT_TYPE).toBe('command-argument');
   });
 
   it('defines the formatter plugin type', () => {
-    expect(PLUGIN_FORMATTER_TYPE).toBe('PLUGIN_FORMATTER');
+    expect(PLUGIN_FORMATTER_TYPE).toBe('formatter');
   });
 
   it('keeps all plugin type constants distinct', () => {

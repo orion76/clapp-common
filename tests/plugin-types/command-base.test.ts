@@ -72,11 +72,11 @@ describe('PluginCommandBase', () => {
       label: 'Read a file',
       command: 'read',
       kind: 'tool',
-      type: 'PLUGIN_COMMAND',
+      type: PLUGIN_COMMAND_TYPE,
     });
     expect(command.id).toBe('read_file');
     expect(command.label).toBe('Read a file');
-    expect(command.type).toBe('PLUGIN_COMMAND');
+    expect(command.type).toBe(PLUGIN_COMMAND_TYPE);
   });
 
   it('maps positional operands to named arguments from the definition', async () => {
