@@ -1,6 +1,6 @@
 import type { IPlugin, IPluginDefinition, IType } from '@orion76/plugin';
 
-import type { IPluginCommandDefinition } from '../command/types';
+import type { ICommandResult, IPluginCommandDefinition } from '../command/types';
 
 /**
  * Definition of one step of the command argument chain.
@@ -60,8 +60,14 @@ export interface IPluginCommandArgument extends IPlugin {
   transformDefinition(definition: IPluginCommandDefinition): IPluginCommandDefinition;
   /**
    * Fills the arguments this step knows how to provide, leaving the rest untouched.
+   *
+   * A step reports what it filled rather than the whole value object, so the steps of the
+   * chain compose without fighting over ownership of a value. A step that cannot resolve
+   * the value of an argument fails the command instead of throwing: the reason travels to
+   * the surface as the text of the failed result.
    * @param state Definition of the command plus the values the host has already parsed
-   * @returns Only the values filled by this step, applied as a patch over `state.values`
+   * @returns Filled values in `data` only (applied as a patch over `state.values`), or a
+   * failed result with the reason in `error`
    */
-  fill(state: ICommandArgumentState): Promise<Record<string, unknown>>;
+  fill(state: ICommandArgumentState): Promise<ICommandResult<Record<string, unknown>>>;
 }

@@ -27,3 +27,6 @@ export { USER_HOME } from './plugins/context/user-home/user-home.context';
 // App meta (library shared with the context plugins)
 export * from './plugins/context/app-meta';
 
+// Command argument chain: the standard step that fills arguments from the app contexts
+export * from './plugins/command-argument';
+

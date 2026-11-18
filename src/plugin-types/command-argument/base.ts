@@ -3,7 +3,7 @@ import { inject } from 'inversify';
 
 import { EVENT_BUS_TOKEN } from '../../tokens';
 import type { IClappLifecycleMap, IEventBus } from '../../types/events';
-import type { IPluginCommandDefinition } from '../command/types';
+import type { ICommandResult, IPluginCommandDefinition } from '../command/types';
 import type { ICommandArgumentState, IPluginCommandArgument, IPluginCommandArgumentDefinition } from './types';
 
 /**
@@ -29,5 +29,5 @@ export abstract class PluginCommandArgumentBase
 
   abstract transformDefinition(definition: IPluginCommandDefinition): IPluginCommandDefinition;
 
-  abstract fill(state: ICommandArgumentState): Promise<Record<string, unknown>>;
+  abstract fill(state: ICommandArgumentState): Promise<ICommandResult<Record<string, unknown>>>;
 }
