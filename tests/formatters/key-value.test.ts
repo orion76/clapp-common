@@ -4,8 +4,8 @@ import { getPluginDefinition } from '@orion76/node-plugin';
 
 import type { IKeyValueData } from '@clapp/common';
 
-import { renderKeyValue } from '../../src/plugins/formatters/key-value/lib.js';
-import { KeyValueFormatterPlugin } from '../../src/plugins/formatters/key-value/key-value.plugin.js';
+import { renderKeyValue } from '../../src/plugins/formatter/terminal/key-value/lib.js';
+import { KeyValueFormatterPlugin } from '../../src/plugins/formatter/terminal/key-value/key-value.plugin.js';
 
 /**
  * Removes the ANSI style codes emitted by `@opentf/cli-styles`, so assertions

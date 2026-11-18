@@ -1,14 +1,14 @@
 /**
  * Plugin discovery configuration of one plugin type.
  *
- * A plugin type (`PLUGIN_COMMAND`, `PLUGIN_CONTEXT`, `PLUGIN_FORMATTER`) is not
+ * A plugin type (`command`, `command-argument`, `context`, `formatter`) is not
  * described by a flat list of patterns anymore: its plugins come from
  * **sources**, each anchored at its own root, and every source (and the type
  * itself) can disable single plugin ids.
  *
  * ```yaml
  * plugins:
- *   PLUGIN_COMMAND:
+ *   command:
  *     # Type-level list: an id disabled here is not loaded from any source.
  *     disabled: []
  *     sources:
@@ -17,22 +17,22 @@
  *       - type: library
  *         library: '@clapp/ai-workflow-plugins'
  *         patterns:
- *           - src/plugins/commands/**\/*.plugin.{js,ts}
+ *           - src/plugins/command/**\/*.plugin.{js,ts}
  *         disabled: []
  *       # Plugins of the project the launcher runs in: `plugins/` in its root.
  *       - type: project
  *         patterns:
- *           - plugins/commands/**\/*.plugin.{js,ts}
+ *           - plugins/command/**\/*.plugin.{js,ts}
  *         disabled: []
- *   PLUGIN_FORMATTER:
+ *   formatter:
  *     disabled: []
  *     sources:
- *       # The built-in formatters are per-file plugin modules of `@clapp/common`
- *       # (`packages/common/src/plugins/formatters/**`), patterns are relative to it.
+ *       # The built-in terminal formatters are per-file plugin modules of `@clapp/common`
+ *       # (`packages/common/src/plugins/formatter/terminal/**`), patterns are relative to it.
  *       - type: library
  *         library: '@clapp/common'
  *         patterns:
- *           - src/plugins/formatters/**\/*.plugin.{js,ts}
+ *           - src/plugins/formatter/terminal/**\/*.plugin.{js,ts}
  *         disabled: []
  * ```
  */

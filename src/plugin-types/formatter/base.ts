@@ -8,9 +8,9 @@ import { IPluginFormatterDefinition, IPluginFormatter } from './types/plugin';
  * string; the concrete class only implements `format`.
  *
  * The class is shared by every formatter set of the core: the terminal
- * formatters of `packages/common/src/plugins/formatters` write their string for a terminal, and the
- * MCP formatters of `packages/common/src/plugins/mcp-formatters` write it for the protocol stream
- * of an MCP server. A host picks a set with the discovery patterns of
+ * formatters of `packages/common/src/plugins/formatter/terminal` write their string for a terminal,
+ * and the MCP formatters of `packages/common/src/plugins/formatter/mcp` write it for the protocol
+ * stream of an MCP server. A host picks a set with the discovery patterns of
  * `PLUGIN_FORMATTER_TYPE`, so the sets stay free to diverge in their styling
  * while sharing the plugin contract.
  *

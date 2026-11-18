@@ -11,7 +11,7 @@ import { renderTable } from './lib';
  * without terminal styling. It carries the same id and kind as the terminal
  * `table` formatter, but writes for the protocol stream of an MCP server: a host
  * opts into this set by pointing the discovery patterns of `PLUGIN_FORMATTER_TYPE`
- * at the modules of `src/plugins/mcp-formatters`.
+ * at the modules of `src/plugins/formatter/mcp`.
  */
 @NodePlugin<IPluginFormatterDefinitionData<'table'>>({
   type: PLUGIN_FORMATTER_TYPE,
