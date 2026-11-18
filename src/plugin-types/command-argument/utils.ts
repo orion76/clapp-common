@@ -143,6 +143,18 @@ function assertFilledPositionalsLast(
 }
 
 /**
+ * Tells whether a value of an argument is still empty.
+ *
+ * An argument the host left out arrives as `undefined`, an input field the user cleared as
+ * an empty string; both mean "no value", so a chain step may fill them and the validation of
+ * the pipeline reports them as missing.
+ * @param value Value the host parsed or a step filled
+ */
+export function isValueMissing(value: unknown): boolean {
+  return value === undefined || value === '';
+}
+
+/**
  * Verifies that every argument name the discovered chain steps declare is registered.
  * A shared constant with a typo matches no argument, so the step would silently fill
  * nothing; the start of the app fails instead.

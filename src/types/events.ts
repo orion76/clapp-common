@@ -50,13 +50,17 @@ export interface IArgsAndOpts {
 export interface IClappLifecycleMap {
   /** Emitted before the command handler is resolved, right after `command:start`. */
   'command:start': ILifecycle<IArgsAndOpts, void>;
-  /** Emitted before `getArguments` turns the raw CLI input into typed plugin arguments. */
+  /** Emitted before the argument chain completes the values the host has parsed. */
   'command:arguments': ILifecycle<IArgsAndOpts, void>;
   /** Emitted before the plugin `action` runs, carrying the resolved plugin arguments. */
   'command:run': ILifecycle<{ args: unknown }, void>;
   /** Emitted after the plugin `action` resolves successfully. */
   'command:end': ILifecycle<{ result: ICommandResult }, void>;
-  /** Emitted when argument resolution or the plugin `action` throws. */
+  /**
+   * Emitted when the command does not complete: a chain step that cannot fill its arguments,
+   * values that do not satisfy the definition, or an action that throws or reports a failed
+   * result.
+   */
   'command:error': ILifecycle<{ error: unknown }, void>;
 }
 

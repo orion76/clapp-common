@@ -50,16 +50,6 @@ export function declaresArgument(config: ICommandConfig, name: string): boolean 
 }
 
 /**
- * Tells whether the value the host has parsed is still empty. A positional argument the
- * user left out and an empty string are both "not provided"; a value typed by the user or
- * sent by a client is never overwritten by a step.
- * @param value Value the host has parsed for the argument
- */
-export function isValueMissing(value: unknown): boolean {
-  return value === undefined || value === '';
-}
-
-/**
  * Extracts the message of a caught value, which the language keeps as `unknown`.
  * @param error Caught value
  */

@@ -4,6 +4,7 @@ import { inject } from 'inversify';
 import { EVENT_BUS_TOKEN } from '../../tokens';
 import { IClappLifecycleMap, IEventBus } from '../../types/events';
 import { ICommandResult, IPluginCommand, IPluginCommandDefinition } from './types';
+import { collectCommandValues } from './values';
 
 
 export abstract class PluginCommandBase<A = {}, C extends Record<string, unknown> = {}>
@@ -13,14 +14,9 @@ export abstract class PluginCommandBase<A = {}, C extends Record<string, unknown
   @inject(EVENT_BUS_TOKEN) protected _events!: IEventBus<IClappLifecycleMap>;
 
   abstract action(args: A): Promise<ICommandResult>;
-  async getArguments<O extends object = object>(args: string[], opts: O): Promise<A> {
-    const _args = { ...opts } as Record<string, any>;
-    if (this.definition.config.arguments) {
-      this.definition.config.arguments.forEach((arg, index) => {
-        const { name } = arg;
-        _args[name] = args[index];
-      });
-    }
-    return _args as A;
+  async getArguments(args: string[], opts: Record<string, unknown>): Promise<A> {
+    const values = collectCommandValues(this.definition.config, { args, opts });
+
+    return values as unknown as A;
   }
 }

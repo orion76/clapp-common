@@ -5,13 +5,14 @@ import type { Container } from 'inversify';
 import {
   PLUGIN_COMMAND_ARGUMENT_TYPE,
   PluginCommandArgumentBase,
+  isValueMissing,
   type ICommandArgumentState,
   type IPluginCommandArgumentDefinitionData,
 
 } from '../../../plugin-types/command-argument';
 import type { ICommandResult, IPluginCommandDefinition } from '../../../plugin-types/command/types';
 import { ARGUMENT_CONTEXTS, ARGUMENT_CONTEXT_NAMES } from '../argument-contexts';
-import { declaresArgument, isValueMissing, relaxFilledArguments, toErrorMessage } from './lib';
+import { declaresArgument, relaxFilledArguments, toErrorMessage } from './lib';
 
 /**
  * Standard step of the command argument chain: fills an argument from the application

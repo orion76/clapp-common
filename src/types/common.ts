@@ -43,11 +43,6 @@ export interface IInitAppOptions {
  */
 export type ULoggerNames = 'clapp_cli';
 
-export interface ICommandExecArguments {
-  name: string;
-  args: string[];
-  opts: Record<string, string>;
-}
 /**
  * Supported JavaScript/TypeScript runtimes a CLI application may run under.
  */

@@ -63,6 +63,8 @@ export type UPluginSourceType = 'appRoot' | 'path' | 'library' | 'project';
 export interface IPluginSourceConfig {
   type: UPluginSourceType;
   patterns: string[];
+  /** Plugin ids this source does not load; an id disabled for the type is dropped from every source. */
+  disabled?: string[];
 }
 
 export interface IPluginSourceLibraryConfig extends IPluginSourceConfig {
@@ -89,4 +91,6 @@ export type UPluginSourceConfig = IPluginSourceConfig | IPluginSourceLibraryConf
  */
 export interface IPluginDiscoveryConfig {
   sources: UPluginSourceConfig[];
+  /** Plugin ids disabled for the whole type: they are not loaded from any of its sources. */
+  disabled?: string[];
 }

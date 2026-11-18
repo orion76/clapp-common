@@ -2,6 +2,8 @@ import { IAppConfig, ICommandArgument, ICommandConfig, ICommandNode, ICommandOpt
 import type { Option } from 'commander';
 import { Argument, Command, CommanderError, createOption } from 'commander';
 
+import type { ICommandPositionalInput } from './types';
+
 
 export function buildCommandArgument(argConfig: ICommandArgument): Argument {
   let commandArgument = argConfig.name;
@@ -92,6 +94,24 @@ export function initializeCommand(command: Command, definition: IPluginCommandDe
       command.addOption(option);
     }
   }
+}
+
+/**
+ * Splits the arguments commander hands to an action into the input of the command pipeline.
+ *
+ * Commander appends the parsed options object and the command itself to the declared
+ * positional arguments, so the last two entries of a call are not operands. A positional
+ * argument the user left out keeps its place with an `undefined` value, which is what the
+ * pipeline reads as an empty optional argument.
+ * @param allArgs Arguments the action of a commander command receives
+ * @returns Positional values in declaration order and the parsed options by name
+ */
+export function parseCommandArguments(allArgs: readonly unknown[]): ICommandPositionalInput {
+  const command = allArgs[allArgs.length - 1] as Command;
+  const opts = command.opts() as Record<string, unknown>;
+  const args = allArgs.slice(0, -2);
+
+  return { args, opts };
 }
 
 /**

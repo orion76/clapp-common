@@ -1,11 +1,12 @@
 /**
- * Formatter contract for command authors: the identifiers of the formatters
- * provided by the host application and the data types they render.
+ * Command plugin contracts, the runner that executes a command for every host and the
+ * helpers that build the commander surface of a definition.
  */
 
 export * from './constants';
 export * from './base';
 export * from './types';
 export * from './di-tokens';
-export * from './utils';
+export * from './runner';
 export * from './service';
+export * from './utils';
