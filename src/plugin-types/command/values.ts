@@ -1,5 +1,6 @@
 import type { IArgsAndOpts } from '../../types/events';
 import { isValueMissing } from '../command-argument/utils';
+import { buildCommandOption } from './utils';
 
 import type {
   IAppliedArgumentPatch,
@@ -17,13 +18,10 @@ export function isValuesInput(input: UCommandPipelineInput): input is ICommandVa
 }
 
 /**
- * Brings the input of any host to the shape the rest of the pipeline works with: values
- * addressed by the names the command declares.
- *
- * A positional argument is the value at the index the command declares it at, so the array a
- * CLI host parses turns into values by the names of `config.arguments`; an MCP call arrives
- * as such an object already. Everything past this point works on names, which is why both
- * hosts are served by one pipeline.
+ * Brings the input of any host to the values the rest of the pipeline works with: values
+ * addressed by the names the command declares. A positional argument becomes the value at its
+ * declared index and an option the value under the name of its declaration; an MCP call
+ * arrives in that shape already, which is why both hosts are served by one pipeline.
  * @param config Command config with the arguments and options of the command
  * @param input Input as the host parsed it
  * @returns Values by argument and option name; a positional argument the host left out stays
@@ -34,10 +32,37 @@ export function collectCommandValues(config: ICommandConfig, input: UCommandPipe
     return { ...input.values };
   }
 
-  const values: Record<string, unknown> = { ...input.opts };
+  const values = collectOptionValues(config, input.opts);
 
   for (const [position, argument] of (config.arguments ?? []).entries()) {
     values[argument.name] = input.args[position];
+  }
+
+  return values;
+}
+
+/**
+ * Reads the options a CLI host parsed under the names the command declares.
+ *
+ * Commander keys a value by the camelCase form of its long flag (`--project-name` becomes
+ * `projectName`), so the key is derived from the declaration through `Option.attributeName()`
+ * and not from a list of known names. A key no declaration produces stays as it is, so
+ * validation rejects the command naming it exactly as before.
+ * @param config Command config with the options of the command
+ * @param opts Options as commander keyed them
+ * @returns Option values by the declared names, plus the keys of undeclared options untouched
+ */
+function collectOptionValues(config: ICommandConfig, opts: Record<string, unknown>): Record<string, unknown> {
+  const declaredNames = new Map<string, string>();
+
+  for (const optionConfig of config.options ?? []) {
+    declaredNames.set(buildCommandOption(optionConfig).attributeName(), optionConfig.name);
+  }
+
+  const values: Record<string, unknown> = {};
+
+  for (const [key, value] of Object.entries(opts)) {
+    values[declaredNames.get(key) ?? key] = value;
   }
 
   return values;
