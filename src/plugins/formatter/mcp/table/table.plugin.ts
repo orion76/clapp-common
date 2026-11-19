@@ -8,16 +8,15 @@ import { renderTable } from './lib';
 
 /**
  * MCP formatter plugin that renders tabular data as a column-aligned table
- * without terminal styling. It carries the same id and kind as the terminal
+ * without terminal styling. It carries the same id as the terminal
  * `table` formatter, but writes for the protocol stream of an MCP server: a host
  * opts into this set by pointing the discovery patterns of `PLUGIN_FORMATTER_TYPE`
  * at the modules of `src/plugins/formatter/mcp`.
  */
-@NodePlugin<IPluginFormatterDefinitionData<'table'>>({
+@NodePlugin<IPluginFormatterDefinitionData>({
   type: PLUGIN_FORMATTER_TYPE,
   id: 'table',
   label: 'Aligned table',
-  kind: 'table',
 })
 @injectable()
 export class MCPTableFormatterPlugin extends PluginFormatterBase<ITableData> {

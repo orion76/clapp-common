@@ -34,7 +34,7 @@ export class CommandService implements ICommandService {
   /**
    * Registers the commands of the discovered command plugins in the program.
    * @param program Commander program the commands are registered in
-   * @param renderResult Writes the result of a command that declares a formatter
+   * @param renderResult Writes the result of a command that declares a data schema
    */
   async createAppCommands(program: Command, renderResult: TCommandResultRenderer): Promise<void> {
     const definitions = await this.pluginManager.getDefinitions();
@@ -47,7 +47,7 @@ export class CommandService implements ICommandService {
    * Registers the commands of the nodes in the parent command.
    * @param parent Command the nodes are registered in
    * @param nodes Nodes of the hierarchy to register
-   * @param renderResult Writes the result of a command that declares a formatter
+   * @param renderResult Writes the result of a command that declares a data schema
    */
   private async createCommands(
     parent: Command,
@@ -64,7 +64,7 @@ export class CommandService implements ICommandService {
    * executable command.
    * @param parent Command the node is registered in
    * @param node Node of the hierarchy to register
-   * @param renderResult Writes the result of a command that declares a formatter
+   * @param renderResult Writes the result of a command that declares a data schema
    */
   private async createNodeCommands(
     parent: Command,
@@ -83,7 +83,7 @@ export class CommandService implements ICommandService {
    * Registers a group: a command that only carries the description and the subcommands of
    * the node.
    * @param node Node with children
-   * @param renderResult Writes the result of a command that declares a formatter
+   * @param renderResult Writes the result of a command that declares a data schema
    * @returns Registered commander command
    */
   private async createGroup(
@@ -107,7 +107,7 @@ export class CommandService implements ICommandService {
    * the command with the rewritten `config`, which is what makes a filled argument optional
    * in `--help` and in the parsing of argv.
    * @param definition Definition of the leaf command as the manager caches it
-   * @param renderResult Writes the result of the command that declares a formatter
+   * @param renderResult Writes the result of the command that declares a data schema
    * @returns Registered commander command
    */
   private async createCommand(

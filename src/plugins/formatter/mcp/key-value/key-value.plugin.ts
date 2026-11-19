@@ -9,14 +9,13 @@ import { renderKeyValue } from './lib';
 /**
  * MCP formatter plugin that renders field data as aligned key-value pairs
  * grouped into titled sections, without terminal styling. It carries the same
- * id and kind as the terminal `key-value` formatter, but writes for the protocol
+ * id as the terminal `key-value` formatter, but writes for the protocol
  * stream of an MCP server.
  */
-@NodePlugin<IPluginFormatterDefinitionData<'key-value'>>({
+@NodePlugin<IPluginFormatterDefinitionData>({
   type: PLUGIN_FORMATTER_TYPE,
   id: 'key-value',
   label: 'Key-value pairs',
-  kind: 'key-value',
 })
 @injectable()
 export class MCPKeyValueFormatterPlugin extends PluginFormatterBase<IKeyValueData> {

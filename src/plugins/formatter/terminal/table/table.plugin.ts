@@ -9,11 +9,10 @@ import { renderTable } from './lib';
 /**
  * Formatter plugin that renders tabular data as a column-aligned table.
  */
-@NodePlugin<IPluginFormatterDefinitionData<'table'>>({
+@NodePlugin<IPluginFormatterDefinitionData>({
   type: PLUGIN_FORMATTER_TYPE,
   id: 'table',
   label: 'Aligned table',
-  kind: 'table',
 })
 @injectable()
 export class TableFormatterPlugin extends PluginFormatterBase<ITableData> {

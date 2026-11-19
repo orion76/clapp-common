@@ -1,15 +1,11 @@
 import { IPluginDefinition, IPlugin } from '@orion76/plugin';
 
 /**
- * Formatter plugin definition. Besides the base plugin fields a formatter
- * declares its `kind` — the data shape it renders, for example `table` or
- * `ordered-list`. The value is an open string, so a new kind does not require
- * changes in this package.
- * @template K Formatter kind
+ * Formatter plugin definition. A formatter declares nothing beyond the base plugin fields:
+ * which data it renders is decided by the app config map from the `$id` of a command data
+ * schema to the formatter id, so the same formatter serves any schema whose data it can render.
  */
-export interface IPluginFormatterDefinition<K extends string = string> extends IPluginDefinition {
-  kind: K;
-}
+export interface IPluginFormatterDefinition extends IPluginDefinition {}
 /**
  * Formatter plugin instance: turns data into a string. Which styling the string
  * carries is up to the formatter set a host configures — the terminal formatters
@@ -27,6 +23,5 @@ export interface IPluginFormatter<D = unknown> extends IPlugin {
 /**
  * Authoring-time formatter definition. `pluginClass` is attached by the
  * `@NodePlugin` decorator, so it is omitted from the object the author writes.
- * @template K Formatter kind
  */
-export type IPluginFormatterDefinitionData<K extends string = string> = Omit<IPluginFormatterDefinition<K>, 'pluginClass'>;
+export type IPluginFormatterDefinitionData = Omit<IPluginFormatterDefinition, 'pluginClass'>;

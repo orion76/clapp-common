@@ -9,14 +9,13 @@ import { renderOrderedList } from './lib';
 /**
  * MCP formatter plugin that renders a todo-shaped list — a title, an optional
  * description and numbered or bulleted items — without terminal styling. It
- * carries the same id and kind as the terminal `ordered-list` formatter, but
+ * carries the same id as the terminal `ordered-list` formatter, but
  * writes for the protocol stream of an MCP server.
  */
-@NodePlugin<IPluginFormatterDefinitionData<'ordered-list'>>({
+@NodePlugin<IPluginFormatterDefinitionData>({
   type: PLUGIN_FORMATTER_TYPE,
   id: 'ordered-list',
   label: 'Ordered list',
-  kind: 'ordered-list',
 })
 @injectable()
 export class MCPOrderedListFormatterPlugin extends PluginFormatterBase<IOrderedListData> {

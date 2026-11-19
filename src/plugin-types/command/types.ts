@@ -17,7 +17,12 @@ export interface IPluginCommandDefinition<A = {}> extends IPluginDefinition {
   command: string;
   kind: UCommandDefinitionKind;
   parent?: string;
-  formatter?: string;
+  /**
+   * `$id` of the JSON Schema that describes the data the action returns. The command names
+   * its data shape, and the app config maps that id to the formatter plugin which renders the
+   * data, so a command stays independent of the formatter set a host loads.
+   */
+  dataSchema?: string;
   config: ICommandConfig;
   pluginClass: IType<IPluginCommand<A>>;
 }
@@ -37,20 +42,19 @@ export type UPluginCommandDefinition = IPluginCommandDefinition;
 /**
  * Result of a command action.
  *
- * A command that declares a `formatter` returns the data to render in `data`;
- * the core passes it to the formatter plugin and prints the returned string.
- * Commands without a formatter keep printing their own output and leave `data`
- * unset.
- * @template D Type of the data handed to the formatter; `unknown` by default
+ * A command that declares a `dataSchema` returns the data to render in `data`; the core
+ * validates it against that schema and passes it to the formatter the app config maps to the
+ * schema. Commands without a schema keep printing their own output and leave `data` unset.
+ * @template D Type of the data described by the schema of the command; `unknown` by default
  */
 export interface ICommandResult<D = unknown> {
   success: boolean;
   error?: string[];
-  /** Data for the formatter declared by the command definition. */
+  /** Data described by the schema declared in the command definition. */
   data?: D;
 }
 /**
- * Renders the result of a command that declares a formatter.
+ * Renders the result of a command that declares a data schema.
  *
  * Implemented by the engine that owns the formatter manager and passed to
  * `ICommandService.createAppCommands`, so `@clapp/common` keeps no core dependency.
@@ -64,7 +68,7 @@ export interface ICommandService {
   /**
    * Registers the commands of the discovered command plugins in the program.
    * @param program Commander program the commands are registered in
-   * @param renderResult Renders the result of a command that declares a formatter
+   * @param renderResult Renders the result of a command that declares a data schema
    */
   createAppCommands(program: Command, renderResult: TCommandResultRenderer): Promise<void>;
 }

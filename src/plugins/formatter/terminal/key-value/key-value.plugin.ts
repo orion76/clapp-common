@@ -10,11 +10,10 @@ import { renderKeyValue } from './lib';
  * Formatter plugin that renders field data as aligned key-value pairs grouped
  * into titled sections.
  */
-@NodePlugin<IPluginFormatterDefinitionData<'key-value'>>({
+@NodePlugin<IPluginFormatterDefinitionData>({
   type: PLUGIN_FORMATTER_TYPE,
   id: 'key-value',
   label: 'Key-value pairs',
-  kind: 'key-value',
 })
 @injectable()
 export class KeyValueFormatterPlugin extends PluginFormatterBase<IKeyValueData> {
