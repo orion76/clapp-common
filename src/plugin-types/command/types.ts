@@ -24,10 +24,10 @@ export interface IPluginCommandDefinition<A = {}> extends IPluginDefinition {
 
 export type IPluginCommandDefinitionData<A = {}> = Omit<IPluginCommandDefinition<A>, 'pluginClass'>;
 
-export interface IPluginCommand<A = {}, C extends Record<string, unknown> = {}> extends IPlugin {
+export interface IPluginCommand<A = {}, D = unknown> extends IPlugin {
   definition: IPluginCommandDefinition<A>;
   getArguments: (args: string[], opts: Record<string, unknown>) => Promise<A>;
-  action(args: A): Promise<ICommandResult>;
+  action(args: A): Promise<ICommandResult<D>>;
 }
 /**
  * Single command definition type. Kept as an alias for backward compatibility;

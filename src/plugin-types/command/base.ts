@@ -7,13 +7,13 @@ import { ICommandResult, IPluginCommand, IPluginCommandDefinition } from './type
 import { collectCommandValues } from './values';
 
 
-export abstract class PluginCommandBase<A = {}, C extends Record<string, unknown> = {}>
+export abstract class PluginCommandBase<A = {}, D = unknown>
   extends NodePluginBase<IPluginCommandDefinition<A>>
-  implements IPluginCommand<A, C> {
+  implements IPluginCommand<A, D> {
 
   @inject(EVENT_BUS_TOKEN) protected _events!: IEventBus<IClappLifecycleMap>;
 
-  abstract action(args: A): Promise<ICommandResult>;
+  abstract action(args: A): Promise<ICommandResult<D>>;
   async getArguments(args: string[], opts: Record<string, unknown>): Promise<A> {
     const values = collectCommandValues(this.definition.config, { args, opts });
 
