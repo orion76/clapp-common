@@ -79,14 +79,6 @@ describe('PluginCommandBase', () => {
     expect(command.type).toBe(PLUGIN_COMMAND_TYPE);
   });
 
-  it('maps positional operands to named arguments from the definition', async () => {
-    const command = createCommand();
-    await expect(command.getArguments(['/a.txt', 'utf-8'], {})).resolves.toEqual({
-      path: '/a.txt',
-      encoding: 'utf-8',
-    });
-  });
-
   it('injects the shared event bus and emits through it', async () => {
     const command = createCommand();
 

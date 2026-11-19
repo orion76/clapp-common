@@ -26,7 +26,6 @@ export type IPluginCommandDefinitionData<A = {}> = Omit<IPluginCommandDefinition
 
 export interface IPluginCommand<A = {}, D = unknown> extends IPlugin {
   definition: IPluginCommandDefinition<A>;
-  getArguments: (args: string[], opts: Record<string, unknown>) => Promise<A>;
   action(args: A): Promise<ICommandResult<D>>;
 }
 /**

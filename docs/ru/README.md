@@ -8,7 +8,7 @@
 
 ## Возможности
 
-- **Контракты плагинов команд** — `IPluginCommandDefinition`, `IPluginCommand`, `ICommandConfig`, `ICommandResult` и базовый класс `PluginCommandBase` с его стандартным `getArguments`, который раскладывает позиционные аргументы и опции.
+- **Контракты плагинов команд** — `IPluginCommandDefinition`, `IPluginCommand`, `ICommandConfig`, `ICommandResult` и базовый класс `PluginCommandBase`; значения команды собирает `CommandRunner` по `config` её определения.
 - **Типы плагинов и виды команд** — константы `PLUGIN_COMMAND_TYPE`, `PLUGIN_COMMAND_ARGUMENT_TYPE`, `PLUGIN_CONTEXT_TYPE`, `PLUGIN_FORMATTER_TYPE` и виды `COMMAND_KIND_TOOL`, `COMMAND_KIND_RESOURCE`, `COMMAND_KIND_PROMPT`, `COMMAND_KIND_GROUP`.
 - **Контракты данных форматирования** — `ITableData`, `IOrderedListData`, `IKeyValueData`, объединение `UFormatterKind`, `IFormatterDataMap` / `TFormatterData<K>` и `PluginFormatterBase`.
 - **Плагины контекстов** — `IContextService`, `IPluginContext` и брендированные идентификаторы `contextToken()`, а также встроенные контексты `cwd`, `app-root`, `user-home`, `process`, `project` и `current-project-path`.

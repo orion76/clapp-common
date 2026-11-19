@@ -12,7 +12,7 @@ Shared contracts of the `clapp` CLI framework: the types, base classes, plugin-t
 
 ## Features
 
-- **Command plugin contracts** — `IPluginCommandDefinition`, `IPluginCommand`, `ICommandConfig`, `ICommandResult` and the `PluginCommandBase` base class with its default `getArguments` mapping of positional arguments and options.
+- **Command plugin contracts** — `IPluginCommandDefinition`, `IPluginCommand`, `ICommandConfig`, `ICommandResult` and the `PluginCommandBase` base class; the values of a command are collected by `CommandRunner` from the `config` of its definition.
 - **Plugin types and command kinds** — the constants `PLUGIN_COMMAND_TYPE`, `PLUGIN_COMMAND_ARGUMENT_TYPE`, `PLUGIN_CONTEXT_TYPE`, `PLUGIN_FORMATTER_TYPE` and the kinds `COMMAND_KIND_TOOL`, `COMMAND_KIND_RESOURCE`, `COMMAND_KIND_PROMPT`, `COMMAND_KIND_GROUP`.
 - **Formatter data contracts** — `ITableData`, `IOrderedListData`, `IKeyValueData`, the `UFormatterKind` union, `IFormatterDataMap` / `TFormatterData<K>` and `PluginFormatterBase`.
 - **Context plugins** — `IContextService`, `IPluginContext` and branded `contextToken()` identifiers, plus the built-in contexts `cwd`, `app-root`, `user-home`, `process`, `project` and `current-project-path`.
