@@ -10,7 +10,8 @@
 
 - **Контракты плагинов команд** — `IPluginCommandDefinition`, `IPluginCommand`, `ICommandConfig`, `ICommandResult` и базовый класс `PluginCommandBase`; значения команды собирает `CommandRunner` по `config` её определения.
 - **Типы плагинов и виды команд** — константы `PLUGIN_COMMAND_TYPE`, `PLUGIN_COMMAND_ARGUMENT_TYPE`, `PLUGIN_CONTEXT_TYPE`, `PLUGIN_FORMATTER_TYPE` и виды `COMMAND_KIND_TOOL`, `COMMAND_KIND_RESOURCE`, `COMMAND_KIND_PROMPT`, `COMMAND_KIND_GROUP`.
-- **Контракты данных форматирования** — `ITableData`, `IOrderedListData`, `IKeyValueData`, объединение `UFormatterKind`, `IFormatterDataMap` / `TFormatterData<K>` и `PluginFormatterBase`.
+- **Схемы данных команд** — `IPluginCommandDefinition.dataSchema` называет `$id` JSON Schema, которая описывает данные, возвращаемые действием; файлы схем лежат в `schemas/**` своего источника, а секция `ISchemaConfig` конфига приложения связывает `$id` схемы с плагином-форматтером, который её данные рендерит.
+- **Контракты данных форматирования** — `ITableData`, `IOrderedListData` и `IKeyValueData`: формы, которые расширяет интерфейс данных команды и которые рендерит `PluginFormatterBase`.
 - **Плагины контекстов** — `IContextService`, `IPluginContext` и брендированные идентификаторы `contextToken()`, а также встроенные контексты `cwd`, `app-root`, `user-home`, `process`, `project` и `current-project-path`.
 - **Встроенные плагины форматтеров** — два набора типа `formatter`: терминальные форматтеры `table`, `ordered-list`, `key-value` (`src/plugins/formatter/terminal/**`) и их аналоги для MCP (`src/plugins/formatter/mcp/**`), которые хосты находят как пофайловые модули плагинов.
 - **Шина событий** — асинхронные хуки жизненного цикла (`IEventBus`, `EventBus`, `IClappLifecycleMap`, `ILifecycle`, `THookListener`) для `command:start`, `command:arguments`, `command:run`, `command:end` и `command:error`.
@@ -27,7 +28,7 @@ npm install @clapp/common
 
 ## Использование
 
-Плагин команды описывает себя через `@NodePlugin` и реализует контракт через `PluginCommandBase`; результат возвращается как данные форматтера, а не печатается самим плагином:
+Плагин команды описывает себя через `@NodePlugin` и реализует контракт через `PluginCommandBase`; результат возвращается как данные, описанные схемой, а не печатается самим плагином:
 
 ```ts
 import { NodePlugin } from '@orion76/node-plugin';
@@ -38,13 +39,16 @@ import {
   PLUGIN_COMMAND_TYPE,
   PluginCommandBase,
   type ICommandResult,
+  type IKeyValueData,
   type IPluginCommandDefinitionData,
-  type TFormatterData,
 } from '@clapp/common';
 
 interface IStatusConfig {
   verbose?: boolean;
 }
+
+/** Данные команды `status`; схема `status` описывает ту же форму. */
+interface IStatusData extends IKeyValueData {}
 
 @NodePlugin<IPluginCommandDefinitionData<IStatusConfig>>({
   type: PLUGIN_COMMAND_TYPE,
@@ -52,7 +56,7 @@ interface IStatusConfig {
   id: 'status',
   command: 'status',
   label: 'Print the project status',
-  formatter: 'key-value',
+  dataSchema: 'status',
   config: {
     description: 'Print the project status',
     options: [{ name: 'verbose', description: 'Show every field', type: 'boolean' }],
@@ -60,7 +64,7 @@ interface IStatusConfig {
 })
 @injectable()
 export class StatusCommandPlugin extends PluginCommandBase<IStatusConfig> {
-  async action(args: IStatusConfig): Promise<ICommandResult<TFormatterData<'key-value'>>> {
+  async action(args: IStatusConfig): Promise<ICommandResult<IStatusData>> {
     return {
       success: true,
       data: {
@@ -71,6 +75,8 @@ export class StatusCommandPlugin extends PluginCommandBase<IStatusConfig> {
   }
 }
 ```
+
+`dataSchema` — это `$id` файла JSON Schema, который лежит в `schemas/**` корня источника, поэтому команде выше соответствует `schemas/status.schema.yml` с `$id: status`. Способ вывода задаёт хост в секции `schemas` своего конфига: `ISchemaConfig.formatters` связывает `status` с id плагина-форматтера (`key-value` терминального набора, например), а `ISchemaConfig.sources` говорит, откуда берутся файлы схем. Ядро валидирует `result.data` по схеме до рендера и отдаёт неуспешный результат с причинами, если данные ей не соответствуют; команда без `dataSchema` по-прежнему печатает вывод сама.
 
 Шина событий внедряется в каждый плагин команды как `this._events`. Обработчик ставится через `on(event, listener)`, снимается через `off(event, listener)` (или через функцию отписки, которую возвращает `on`) и может быть поставлен однократно через `once(event, listener)`; тип обработчика — `THookListener<IClappLifecycleMap[event]>`, а саму карту жизненного цикла можно расширить слиянием объявлений.
 

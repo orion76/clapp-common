@@ -14,7 +14,8 @@ Shared contracts of the `clapp` CLI framework: the types, base classes, plugin-t
 
 - **Command plugin contracts** — `IPluginCommandDefinition`, `IPluginCommand`, `ICommandConfig`, `ICommandResult` and the `PluginCommandBase` base class; the values of a command are collected by `CommandRunner` from the `config` of its definition.
 - **Plugin types and command kinds** — the constants `PLUGIN_COMMAND_TYPE`, `PLUGIN_COMMAND_ARGUMENT_TYPE`, `PLUGIN_CONTEXT_TYPE`, `PLUGIN_FORMATTER_TYPE` and the kinds `COMMAND_KIND_TOOL`, `COMMAND_KIND_RESOURCE`, `COMMAND_KIND_PROMPT`, `COMMAND_KIND_GROUP`.
-- **Formatter data contracts** — `ITableData`, `IOrderedListData`, `IKeyValueData`, the `UFormatterKind` union, `IFormatterDataMap` / `TFormatterData<K>` and `PluginFormatterBase`.
+- **Command data schemas** — `IPluginCommandDefinition.dataSchema` names the `$id` of the JSON Schema that describes the data an action returns; the schema files live in `schemas/**` of their source and the `ISchemaConfig` section of the app config maps a schema `$id` to the formatter plugin that renders its data.
+- **Formatter data contracts** — `ITableData`, `IOrderedListData` and `IKeyValueData`: the shapes a command's data interface extends, and the shapes `PluginFormatterBase` renders.
 - **Context plugins** — `IContextService`, `IPluginContext` and branded `contextToken()` identifiers, plus the built-in contexts `cwd`, `app-root`, `user-home`, `process`, `project` and `current-project-path`.
 - **Built-in formatter plugins** — two sets of the `formatter` plugin type: the terminal formatters `table`, `ordered-list`, `key-value` (`src/plugins/formatter/terminal/**`) and their MCP counterparts (`src/plugins/formatter/mcp/**`), discovered by the hosts as per-file plugin modules.
 - **Event bus** — asynchronous lifecycle hooks (`IEventBus`, `EventBus`, `IClappLifecycleMap`, `ILifecycle`, `THookListener`) for `command:start`, `command:arguments`, `command:run`, `command:end` and `command:error`.
@@ -31,7 +32,7 @@ npm install @clapp/common
 
 ## Usage
 
-A command plugin describes itself with `@NodePlugin` and implements the contract through `PluginCommandBase`; the result is returned as formatter data instead of being printed by the plugin itself:
+A command plugin describes itself with `@NodePlugin` and implements the contract through `PluginCommandBase`; the result is returned as data described by a schema, not printed by the plugin itself:
 
 ```ts
 import { NodePlugin } from '@orion76/node-plugin';
@@ -42,13 +43,16 @@ import {
   PLUGIN_COMMAND_TYPE,
   PluginCommandBase,
   type ICommandResult,
+  type IKeyValueData,
   type IPluginCommandDefinitionData,
-  type TFormatterData,
 } from '@clapp/common';
 
 interface IStatusConfig {
   verbose?: boolean;
 }
+
+/** Data of the `status` command; the `status` schema describes the same shape. */
+interface IStatusData extends IKeyValueData {}
 
 @NodePlugin<IPluginCommandDefinitionData<IStatusConfig>>({
   type: PLUGIN_COMMAND_TYPE,
@@ -56,7 +60,7 @@ interface IStatusConfig {
   id: 'status',
   command: 'status',
   label: 'Print the project status',
-  formatter: 'key-value',
+  dataSchema: 'status',
   config: {
     description: 'Print the project status',
     options: [{ name: 'verbose', description: 'Show every field', type: 'boolean' }],
@@ -64,7 +68,7 @@ interface IStatusConfig {
 })
 @injectable()
 export class StatusCommandPlugin extends PluginCommandBase<IStatusConfig> {
-  async action(args: IStatusConfig): Promise<ICommandResult<TFormatterData<'key-value'>>> {
+  async action(args: IStatusConfig): Promise<ICommandResult<IStatusData>> {
     return {
       success: true,
       data: {
@@ -75,6 +79,8 @@ export class StatusCommandPlugin extends PluginCommandBase<IStatusConfig> {
   }
 }
 ```
+
+`dataSchema` is the `$id` of a JSON Schema file that lives in `schemas/**` of the source root, so the command above is paired with `schemas/status.schema.yml` declaring `$id: status`. The host names the rendering in the `schemas` section of its config: `ISchemaConfig.formatters` maps `status` to the id of a formatter plugin (`key-value` in the terminal set, for instance), while `ISchemaConfig.sources` says where the schema files come from. The core validates `result.data` against the schema before rendering it and reports a failed result with reasons when the data does not match; a command without `dataSchema` keeps printing its own output.
 
 The event bus is injected into every command plugin as `this._events`. A listener is registered with `on(event, listener)`, removed with `off(event, listener)` (or the unsubscribe function `on` returns) and can be registered once with `once(event, listener)`; the listener type is `THookListener<IClappLifecycleMap[event]>`, and the lifecycle map itself can be extended by declaration merging.
 
