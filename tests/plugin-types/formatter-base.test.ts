@@ -9,11 +9,12 @@ import type { IPluginFormatterDefinition } from '../../src/plugin-types/formatte
 import { PLUGIN_FORMATTER_TYPE } from '../../src/plugin-types/formatter/constants.js';
 
 
-const definition: IPluginFormatterDefinition<'table'> = {
+// A formatter declares nothing beyond the base plugin fields: which data it renders is
+// decided by the `schemas.formatters` map of the app config, not by a definition field.
+const definition: IPluginFormatterDefinition = {
   type: PLUGIN_FORMATTER_TYPE,
   id: 'test-formatter',
   label: 'Test Formatter',
-  kind: 'table',
 };
 
 @NodePlugin(definition)

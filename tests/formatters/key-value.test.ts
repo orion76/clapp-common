@@ -87,8 +87,9 @@ describe('renderKeyValue', () => {
 });
 
 describe('KeyValueFormatterPlugin', () => {
-  it('declares the key-value kind and id', () => {
-    expect(getPluginDefinition(KeyValueFormatterPlugin)).toMatchObject({ id: 'key-value', kind: 'key-value' });
+  it('declares its id and no data selector of its own', () => {
+    expect(getPluginDefinition(KeyValueFormatterPlugin)).toMatchObject({ id: 'key-value' });
+    expect(getPluginDefinition(KeyValueFormatterPlugin)).not.toHaveProperty('kind');
   });
 
   it('formats the given data', async () => {

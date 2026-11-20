@@ -16,6 +16,7 @@ const definition: IPluginCommandDefinitionData = {
   label: 'Read a file',
   command: 'read',
   kind: 'tool',
+  dataSchema: 'read-file',
   config: {
     arguments: [
       { name: 'path', description: 'File path' },
@@ -41,8 +42,8 @@ const RECORDING_BUS: IEventBus<IClappLifecycleMap> = {
 
 @NodePlugin(definition)
 @injectable()
-class ReadFileCommand extends PluginCommandBase<{ path: string; encoding: string }, {}> {
-  async action(args: { path: string; encoding: string }): Promise<ICommandResult> {
+class ReadFileCommand extends PluginCommandBase<{ path: string; encoding: string }, string> {
+  async action(args: { path: string; encoding: string }): Promise<ICommandResult<string>> {
     return { success: true, data: args.path };
   }
 
@@ -72,6 +73,7 @@ describe('PluginCommandBase', () => {
       label: 'Read a file',
       command: 'read',
       kind: 'tool',
+      dataSchema: 'read-file',
       type: PLUGIN_COMMAND_TYPE,
     });
     expect(command.id).toBe('read_file');
